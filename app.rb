@@ -1,17 +1,4 @@
-require 'cuba'
-require 'cuba/render'
-require 'rack/protection'
-require 'slim'
-require 'ohm'
-require 'pry'
-
-Cuba.use Rack::Session::Cookie, secret: '__a_very_long_string__'
-Cuba.use Rack::Protection
-Cuba.use Rack::Protection::RemoteReferrer
-Cuba.plugin Cuba::Render
-Cuba.settings[:render][:template_engine] = 'slim'
-
-Dir["./models/*.rb"].each  { |rb| require rb  }
+require './config/application'
 
 def user_logged?
   res.redirect '/login' unless session[:user]
@@ -23,7 +10,6 @@ Cuba.define do
   on root do
     render 'add_movement', movement: Movement.new
     on param('movement') do |params|
-      params["created_at"] = Time.now.strftime("%D") if params["created_at"].empty?
       params["user"] = session[:user]
       Movement.create(params)
       res.redirect '/'

@@ -6,4 +6,9 @@ class Movement < Ohm::Model
 
   index :user
   index :created_at
+
+  def save
+    self.created_at = Time.now.strftime("%D") if self.created_at.empty?
+    super
+  end
 end
