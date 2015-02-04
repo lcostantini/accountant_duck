@@ -1,0 +1,10 @@
+table
+  tr
+    th Date
+    th Description
+    th Price
+  - movements.each do |movement|
+    tr
+      td= movement.created_at
+      td= movement.description
+      td= movement.price

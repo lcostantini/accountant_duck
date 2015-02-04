@@ -21,7 +21,14 @@ Cuba.define do
   #user_logged?
 
   on root do
-    render 'index'
+    render 'add_movement', movement: Movement.new
+    on param('movement') do |params|
+      params["created_at"] = Time.now.strftime("%D") if params["created_at"].empty?
+      params["user"] = session[:user]
+      Movement.create(params)
+      res.redirect '/'
+    end
+    res.write partial 'index', movements: Movement.all.to_a
   end
 
   on 'login' do
