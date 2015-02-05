@@ -1,8 +1,5 @@
-h3 Login
-form action="/login" method="POST"
-  label User:
-  input name="user[name]" type="text"
-  br
-  label Password:
-  input name="user[password]" type="password"
-  button name="login" type="submit" Login
+#form-pure
+  form.pure-form.pure-form-stacked action="/login" method="POST"
+    input#email name="user[name]" type="text" placeholder="User"
+    input#password name="user[password]" type="password" placeholder="Password"
+    button.pure-button.pure-button-primary name="login" type="submit" Login

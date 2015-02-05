@@ -1,10 +1,5 @@
-form action="/" method="POST"
-  label Description:
-  input name="movement[description]" type="text"
-  br
-  label Price:
-  input name="movement[price]" type="text"
-  br
-  label Date:
-  input name="movement[created_at]" type="date"
-  button name="save" type="submit" Save
+form.pure_form action="/" method="POST"
+  input name="movement[description]" type="text" placeholder="Description"
+  input name="movement[price]" type="text" placeholder="Price"
+  input name="movement[created_at]" type="date" placeholder="Date"
+  button.pure-button.pure-button-primary type="submit" Save
