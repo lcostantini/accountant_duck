@@ -8,6 +8,10 @@ html
   body
     #header
       h1 Accountant Duck
+      - if current_user
+          a.links href="/logout" Logout
+      - else
+          a.links href="/login" Login
     #container
       #container-head
         == content
