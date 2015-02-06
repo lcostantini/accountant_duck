@@ -1,16 +1,18 @@
 require './config/application'
 
 Cuba.define do
-  #login_if_user_not_logged
-
   on root do
-    render 'add_movement', movement: Movement.new
-    on param('movement') do |params|
-      params['user'] = current_user
-      Movement.create params
-      res.redirect '/'
+    if current_user
+      render 'add_movement', movement: Movement.new
+      on param('movement') do |params|
+        params['user'] = current_user
+        Movement.create params
+        res.redirect '/'
+      end
+      res.write partial 'index', movements: Movement.all.to_a
+    else
+      render 'index', movements: Movement.all.to_a
     end
-    res.write partial 'index', movements: Movement.all.to_a
   end
 
   on 'login' do
@@ -22,5 +24,10 @@ Cuba.define do
         res.redirect '/'
       end
     end
+  end
+
+  on 'logout' do
+    session.delete 'user'
+    res.redirect '/'
   end
 end
