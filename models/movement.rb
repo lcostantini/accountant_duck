@@ -21,6 +21,10 @@ class Movement < Ohm::Model
   end
 
   def delete_minus
-    self.price[1..-1] if self.price[0] == "-"
+    if self.price[0] == "-"
+      self.price[1..-1]
+    else
+      self.price
+    end
   end
 end
