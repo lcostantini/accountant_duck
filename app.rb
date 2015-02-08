@@ -23,15 +23,13 @@ Cuba.define do
     end
   end
 
-  on post do
-    on "delete/:id" do |id|
-      Movement[id].delete
-      res.redirect '/'
-    end
+  on "delete/:id" do |id|
+    Movement[id].delete
+    res.redirect '/'
   end
 
   on 'login' do
-    render 'login', user: User.new
+    render 'form_login', user: User.new
     on param('user') do |params|
       user = User.with :user_name, params['name']
       if user && user.password == params['password']
