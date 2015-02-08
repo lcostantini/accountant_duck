@@ -20,7 +20,7 @@ h1 {
 }
 h3 {
   font-size: 25px;
-  margin: 2em -187px;
+  margin: 2em -139px;
   width: 80%;
   color: black;
 }
@@ -36,7 +36,7 @@ h3 {
   font-size: 18px;
   font-weight: bold;
   color: white;
-  padding: 1em 1.6em;
+  padding: 3em 1.6em;
   font-weight: 100;
   border-radius: 5px;
   line-height: 1em;
@@ -45,7 +45,7 @@ h3 {
   font-size: 18px;
   font-weight: bold;
   color: white;
-  padding: 7% 20%;
+  padding: 3% 24%;
   font-weight: 100;
   border-radius: 5px;
   line-height: 1em;
