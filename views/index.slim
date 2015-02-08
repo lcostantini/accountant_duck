@@ -7,16 +7,14 @@
           th Description
           th Price
       - movements.each do |movement|
-        tr
+        tr id="#{movement.movement}"
           td= movement.created_at
           td= movement.description
-          td= movement.price
+          td $ #{movement.price}
           - if current_user
             td
-              a href="/edit/#{movement.id}" Edit
+              a.links href="/edit/#{movement.id}" Edit
             td
               form action="/delete/#{movement.id}" method="POST"
                 button name="delete" type="submit" Delete
-
-    h3 Total:
-    h3 = calculate_total
+    h3 Total: #{calculate_total}

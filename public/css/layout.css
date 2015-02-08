@@ -18,6 +18,12 @@ h1 {
   display: inline-block;
   margin: 0.67em 10px;
 }
+h3 {
+  font-size: 25px;
+  margin: 2em -187px;
+  width: 80%;
+  color: black;
+}
 .container {
   width: 80%;
   height: 80%;
@@ -50,11 +56,17 @@ h1 {
   padding: 6%;
 }
 .links {
-  color: white;
+  color: #7CA7FF;
   text-decoration: none;
   font-size: 16px;
 }
 .pure-button {
   border-radius: 20px;
   background-color: #005380;
+}
+#deposit {
+  background-color: #030303;
+}
+#extraction {
+  background-color: #7D0C0C;
 }
