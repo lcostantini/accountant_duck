@@ -18,11 +18,10 @@ h1 {
   display: inline-block;
   margin: 0.67em 10px;
 }
-#container {
+.container {
   width: 80%;
   height: 80%;
   margin: auto;
-  position: absolute;
   top: 0px; left: 0; bottom: 0; right: 0;
   text-align: center;
   text-transform: uppercase;
@@ -40,7 +39,7 @@ h1 {
   font-size: 18px;
   font-weight: bold;
   color: white;
-  padding: 11% 30%;
+  padding: 7% 20%;
   font-weight: 100;
   border-radius: 5px;
   line-height: 1em;
