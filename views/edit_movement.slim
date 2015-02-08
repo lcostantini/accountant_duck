@@ -1,0 +1,8 @@
+form.pure_form action="/edit/#{movement.id}" method="POST"
+  input name="movement[description]" type="text" placeholder="Description" value="#{movement.description}"
+  input name="movement[price]" type="text" placeholder="Amount" value="#{movement.price}"
+  select name="movement[movement]"
+    option Extraction
+    option Deposit
+  input name="movement[created_at]" type="date" placeholder="Date" value="#{movement.created_at}"
+  button.pure-button.pure-button-primary type="submit" Update

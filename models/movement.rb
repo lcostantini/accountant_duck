@@ -9,9 +9,18 @@ class Movement < Ohm::Model
   index :created_at
 
   def save
-    self.price = "-#{self.price}" if self.movement == "Extraction"
+    price_for_deposit_or_extraction
     self.movement = self.movement.downcase
     self.created_at = Time.now.strftime("%D") if self.created_at.empty?
     super
+  end
+
+  def price_for_deposit_or_extraction
+    self.price = delete_minus
+    self.price = "-#{self.price}" if self.movement == "Extraction"
+  end
+
+  def delete_minus
+    self.price[1..-1] if self.price[0] == "-"
   end
 end

@@ -1,4 +1,4 @@
-#container
+.container
   #container-subhead
     table.pure-table.pure-table-bordered
       thead
@@ -11,3 +11,9 @@
           td= movement.created_at
           td= movement.description
           td= movement.price
+          - if current_user
+            td
+              a href="/edit/#{movement.id}" Edit
+            td
+              form action="/delete/#{movement.id}" method="POST"
+                button name="delete" type="submit" Delete
