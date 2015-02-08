@@ -4,6 +4,9 @@ GEM
     coderay (1.1.0)
     cuba (3.3.0)
       rack
+    dotenv (1.0.2)
+    dotenv-rails (1.0.2)
+      dotenv (= 1.0.2)
     hiredis (0.5.2)
     method_source (0.8.2)
     msgpack (0.5.10)
@@ -33,6 +36,7 @@ PLATFORMS
 
 DEPENDENCIES
   cuba
+  dotenv-rails
   ohm
   pry
   rack-protection
