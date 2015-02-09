@@ -30,7 +30,7 @@ Cuba.define do
 
   on 'login' do
     render 'form_login', user: User.new
-    on param('user') do |params|
+    on param 'user' do |params|
       user = User.with :user_name, params['name']
       if user && user.password == params['password']
         session[:user] = user.id

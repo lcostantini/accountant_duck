@@ -1,6 +1,6 @@
 form.pure_form action="/edit/#{movement.id}" method="POST"
-  input name="movement[description]" type="text" placeholder="Description" value="#{movement.description}"
-  input name="movement[price]" type="text" placeholder="Amount" value="#{movement.price}"
+  input name="movement[description]" type="text" placeholder="Description" value="#{movement.description}" required="required"
+  input name="movement[price]" type="text" placeholder="Amount" value="#{movement.price}" required="required"
   select name="movement[movement]"
     option Extraction
     option Deposit
