@@ -12,6 +12,6 @@ group :development, :test do
   gem 'pry'
 end
 
-group :test do
+group :production, :test do
   gem 'dotenv-rails'
 end
