@@ -9,7 +9,7 @@ require 'ohm'
 Dir["./models/*.rb"].each { |rb| require rb }
 Dir["./helpers/*.rb"].each { |rb| require rb }
 
-Ohm.redis = Redic.new ENV['REDISTOGO_URL']
+Ohm.redis = Redic.new ENV['REDISCLOUD_URL']
 
 Cuba.use Rack::Session::Cookie, secret: '__a_very_long_string__'
 Cuba.use Rack::Protection
