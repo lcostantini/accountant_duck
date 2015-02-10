@@ -9,9 +9,10 @@ html
     #header
       h1 Accountant Duck
       - if current_user
-          a.links href="/logout" Logout
+          a.link href="/logout" Logout
       - else
-          a.links href="/login" Login
+          a.link href="/login" Login
+      a.link href="https://github.com/lcostantini/accountant_duck/blob/master/Readme.md" Help
     .container
       #container-head
         == content

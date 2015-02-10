@@ -1,20 +1,21 @@
 .container
   #container-subhead
-    table.pure-table.pure-table-bordered
+    h3 Total: $ #{calculate_total}
+    table.pure-table.pure-table-bordered.table-center
       thead
         tr
           th Date
           th Description
           th Price
+          - if current_user
+            th Actions
       - movements.each do |movement|
-        tr id="#{movement.movement}"
+        tr
           td= movement.created_at
           td= movement.description
-          td $ #{movement.price}
+          td class="#{movement.movement}" $ #{movement.price}
           - if current_user
             td
-              a.links href="/edit/#{movement.id}" Edit
-            td
-              form action="/delete/#{movement.id}" method="POST"
-                button name="delete" type="submit" Delete
-    h3 Total: $ #{calculate_total}
+              a.pure-button.pure-button-primary.edit-button href="/edit/#{movement.id}" Edit
+              form.button-form action="/delete/#{movement.id}" method="POST"
+                button.pure-button.pure-button-primary.delete-button name="delete" type="submit" Delete

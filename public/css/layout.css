@@ -1,6 +1,6 @@
 body {
   min-width: 80%;
-  background-color: #1F8DD6;
+  background-color: rgba(118, 243, 151, 0.02);
   margin: 0;
   padding: 0;
   font-family: "Arial", sans-serif;
@@ -20,13 +20,12 @@ h1 {
 }
 h3 {
   font-size: 25px;
-  margin: 2em -139px;
-  width: 80%;
+  margin: 1.5em auto;
   color: black;
 }
 .container {
   width: 80%;
-  height: 80%;
+  height: 100%;
   margin: auto;
   top: 0px; left: 0; bottom: 0; right: 0;
   text-align: center;
@@ -36,37 +35,54 @@ h3 {
   font-size: 18px;
   font-weight: bold;
   color: white;
-  padding: 3em 1.6em;
+  margin: 2em auto;
   font-weight: 100;
   border-radius: 5px;
   line-height: 1em;
 }
 #container-subhead {
   font-size: 18px;
-  font-weight: bold;
-  color: white;
-  padding: 3% 24%;
+  color: black;
   font-weight: 100;
   border-radius: 5px;
   line-height: 1em;
+  margin: 3em auto;
 }
 #form-pure {
   width: 45%;
   margin: 0% 28%;
   padding: 6%;
 }
-.links {
+.link {
   color: #7CA7FF;
   text-decoration: none;
   font-size: 16px;
+  margin-left: 10px;
 }
 .pure-button {
   border-radius: 20px;
   background-color: #005380;
 }
-#deposit {
-  background-color: #030303;
+a.pure-button-primary {
+  background-color: #AA8247;
 }
-#extraction {
-  background-color: #7D0C0C;
+.delete-button {
+  background-color: rgba(162, 0, 0, 0.69);
+  padding: 6px;
+}
+.edit-button {
+  padding: 6px 16px;
+  text-transform: none;
+}
+.deposit {
+  color: blue;
+}
+.extraction {
+  color: #7D0C0C;
+}
+.table-center {
+  margin: 0 auto;
+}
+.button-form {
+  display: inline-block;
 }
