@@ -28,11 +28,9 @@ you need to add a **description**, **price**, if is a **deposit** or **extractio
 and the **date**. By default, the date shows today date, but you can modify.
 
 # Install
-```
-1. git clone git@github.com:lcostantini/accountant_duck.git
+1. Clone this repo.
 2. Run [Redis](http://redis.io/download).
 3. And run **rackup**
-```
 
 # Contributing
 1. Fork it
