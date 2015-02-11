@@ -21,7 +21,8 @@ To add a new operation in the app, you need to be register. You find the
 After you register you will return to see the page with the table but this time with more information.
 
 You can see in the table a new column called **Actions** that have two buttons
-than let you edit and delete each operation.
+than let you edit and delete each operation. **_An important detail is that
+transactions of the present day are the only ones whoy can edit and delete.__**
 
 Other new thing that you can see is the form to add an deposit or extraction
 you need to add a **description**, **price**, if is a **deposit** or **extraction**
