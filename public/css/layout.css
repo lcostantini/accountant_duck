@@ -81,6 +81,11 @@ a.pure-button-primary {
   padding: 6px 16px;
   text-transform: none;
 }
+.back-button {
+  padding: 8px 20px;
+  text-transform: none;
+  margin: 1em 0em 0em 49.5em;
+}
 .deposit {
   color: blue;
 }
