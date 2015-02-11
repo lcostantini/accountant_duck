@@ -9,4 +9,8 @@ module UserHelpers
       mov.price.to_f
     end.inject(:+).round(3)
   end
+
+  def show_actions? created_at
+    current_user && created_at == Time.now.strftime("%D")
+  end
 end

@@ -14,8 +14,10 @@
           td= movement.created_at
           td= movement.description
           td class="#{movement.movement}" $ #{movement.price}
-          - if current_user
+          - if show_actions? movement.created_at
             td
               a.pure-button.pure-button-primary.edit-button href="/edit/#{movement.id}" Edit
               form.button-form action="/delete/#{movement.id}" method="POST"
                 button.pure-button.pure-button-primary.delete-button name="delete" type="submit" Delete
+          - else
+            td
