@@ -3,7 +3,7 @@ require './config/application'
 Cuba.define do
   on root do
     if current_user
-      render 'add_movement', movement: Movement.new
+      render 'form_movement', movement: Movement.new
       on param 'movement' do |params|
         params['user'] = current_user
         Movement.create params
@@ -16,7 +16,7 @@ Cuba.define do
   end
 
   on "edit/:id" do |id|
-    render 'edit_movement', movement: Movement[id]
+    render 'form_movement', movement: Movement[id]
     on param 'movement' do |params|
       Movement[id].update params
       res.redirect '/'
