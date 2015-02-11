@@ -10,7 +10,7 @@ module UserHelpers
     end.inject(:+).round(3)
   end
 
-  def show_actions? created_at
+  def can_use_actions? created_at
     current_user && created_at == Time.now.strftime("%D")
   end
 

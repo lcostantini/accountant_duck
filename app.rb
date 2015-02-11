@@ -16,16 +16,20 @@ Cuba.define do
   end
 
   on "edit/:id" do |id|
-    render 'form_movement', movement: Movement[id]
-    on param 'movement' do |params|
-      Movement[id].update params
-      res.redirect '/'
+    if can_use_actions? Movement[id].created_at
+      render 'form_movement', movement: Movement[id]
+      on param 'movement' do |params|
+        Movement[id].update params
+        res.redirect '/'
+      end
     end
   end
 
   on "delete/:id" do |id|
-    Movement[id].delete
-    res.redirect '/'
+    if can_use_actions? Movement[id].created_at
+      Movement[id].delete
+      res.redirect '/'
+    end
   end
 
   on 'login' do

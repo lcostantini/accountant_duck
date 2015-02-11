@@ -7,17 +7,13 @@
           th Date
           th Description
           th Price
-          - if current_user
-            th Actions
       - movements.each do |movement|
         tr
           td= movement.created_at
           td= movement.description
-          td class="#{movement.movement}" $ #{movement.price}
-          - if show_actions? movement.created_at
-            td
+          td class="#{movement.movement}"
+            | $ #{movement.price}
+            - if can_use_actions? movement.created_at
               a.pure-button.pure-button-primary.edit-button href="/edit/#{movement.id}" Edit
               form.button-form action="/delete/#{movement.id}" method="POST"
                 button.pure-button.pure-button-primary.delete-button name="delete" type="submit" Delete
-          - else
-            td
