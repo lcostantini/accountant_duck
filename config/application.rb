@@ -14,7 +14,7 @@ Ohm.redis = Redic.new ENV['REDISCLOUD_URL']
 Cuba.use Rack::Session::Cookie, secret: '__a_very_long_string__'
 Cuba.use Rack::Protection
 Cuba.use Rack::Protection::RemoteReferrer
-Cuba.use Rack::Static, urls: ['/css'], root: 'public'
+Cuba.use Rack::Static, urls: ['/css', '/img'], root: 'public'
 Cuba.plugin Cuba::Render
 Cuba.plugin UserHelpers
 Cuba.settings[:render][:template_engine] = 'slim'

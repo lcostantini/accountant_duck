@@ -14,7 +14,7 @@ body {
 }
 h1 {
   font-size: 16px;
-  width: 90%;
+  width: 11%;
   display: inline-block;
   margin: 0.67em 10px;
 }
@@ -22,6 +22,12 @@ h3 {
   font-size: 25px;
   margin: 1.5em auto;
   color: black;
+}
+img {
+  height: 30;
+  width: 30;
+  margin: -0.5em;
+  padding: 0 78em 0 0;
 }
 .container {
   width: 80%;
@@ -69,6 +75,7 @@ a.pure-button-primary {
 .delete-button {
   background-color: rgba(162, 0, 0, 0.69);
   padding: 6px;
+  margin: 0 0 0 5px;
 }
 .edit-button {
   padding: 6px 16px;
