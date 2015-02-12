@@ -9,11 +9,12 @@ html
     #header
       h1 Accountant Duck
       img src="/img/accountant_duck.png" height="30" width="30"
-      - if current_user
-          a.link href="/logout" Logout
-      - else
-          a.link href="/login" Login
-      a.link href="https://github.com/lcostantini/accountant_duck/blob/master/Readme.md" Help
+      div.links
+        - if current_user
+            a.link href="/logout" Logout
+        - else
+            a.link href="/login" Login
+        a.link href="https://github.com/lcostantini/accountant_duck/blob/master/Readme.md" Help
     .container
       #container-head
         == content

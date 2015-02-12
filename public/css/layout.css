@@ -14,23 +14,30 @@ body {
 }
 h1 {
   font-size: 16px;
-  width: 11%;
+  width: 140px;
   display: inline-block;
   margin: 0.67em 10px;
+}
+h2 {
+  padding: 2em;
+  margin: 0.80em 3em;
 }
 h3 {
   font-size: 25px;
   margin: 1.5em auto;
   color: black;
 }
+br {
+  margin: 0.5em;
+}
 img {
-  height: 30;
-  width: 30;
+  height: 30px;
+  width: 30px;
   margin: -0.5em;
-  padding: 0em 78em 0em 0em;
+  text-align: left;
 }
 .container {
-  width: 80%;
+  width: 100%;
   height: 100%;
   margin: auto;
   top: 0px; left: 0; bottom: 0; right: 0;
@@ -54,16 +61,21 @@ img {
   line-height: 1em;
   margin: 3em auto;
 }
-#form-pure {
-  width: 45%;
-  margin: 0% 28%;
-  padding: 6%;
+.pure-form-stacked {
+  margin: 5% 40%;
 }
 .link {
   color: #7CA7FF;
   text-decoration: none;
   font-size: 16px;
-  margin-left: 1em;
+  margin-right: 1em;
+  margin-top: 0.67em;
+}
+.links {
+  display: inline-block;
+  position: absolute;
+  right: 2em;
+  top: 0.67em;
 }
 .pure-button {
   border-radius: 20px;
@@ -103,4 +115,21 @@ a.pure-button-primary {
   border-right: 1px solid #CBCBCB;
   border-top: 1px solid #CBCBCB;
   text-align: left;
+}
+.errors-page {
+  color: black;
+  border: 0.2em solid;
+  text-align: left;
+  background: url('/img/cool-duck.png') no-repeat 98% 14px;
+  background-size: 110px 110px;
+  line-height: 0.8em;
+}
+#error-link {
+  font-size: 26px;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+}
+.pure-button-login {
+  color: white;
+  margin: 0 0 0 10.6em;
 }
