@@ -29,4 +29,8 @@ module UserHelpers
       movement.created_at
     end
   end
+
+  def is_deposit? movement
+    movement.movement == "deposit"
+  end
 end
