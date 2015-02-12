@@ -22,6 +22,9 @@ Cuba.define do
         Movement[id].update params
         res.redirect '/'
       end
+    else
+      res.status = 401
+      render "#{res.status}"
     end
   end
 
@@ -29,6 +32,9 @@ Cuba.define do
     if can_use_actions? Movement[id].created_at
       Movement[id].delete
       res.redirect '/'
+    else
+      res.status = 401
+      render "#{res.status}"
     end
   end
 
