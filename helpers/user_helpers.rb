@@ -14,22 +14,6 @@ module UserHelpers
     current_user && created_at == Time.now.strftime("%D")
   end
 
-  def form_action movement
-    if movement.attributes.empty?
-      'movements'
-    else
-      "#{movement.id}"
-    end
-  end
-
-  def form_method movement
-    if movement.attributes.empty?
-      'POST'
-    else
-      'PUT'
-    end
-  end
-
   def date_value movement
     if movement.attributes.empty?
       Time.now.strftime("%D")
@@ -40,5 +24,13 @@ module UserHelpers
 
   def is_deposit? movement
     movement.type == "deposit"
+  end
+
+  def set_req_method
+    if req.fullpath.end_with? "delete="
+      env["REQUEST_METHOD"] = "DELETE"
+    else
+      env["REQUEST_METHOD"] = "PUT"
+    end
   end
 end

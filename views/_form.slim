@@ -1,0 +1,11 @@
+input name="movement[description]" type="text" placeholder="Description" value="#{movement.description}" required="required"
+input name="movement[price]" type="text" placeholder="Amount" value="#{movement.price}" required="required"
+select name="movement[type]"
+  - if is_deposit? movement
+    option Extraction
+    option selected="selected" Deposit
+  - else
+    option selected="selected" Extraction
+    option Deposit
+input name="movement[created_at]" type="text" placeholder="mm/dd/yy" value="#{date_value(movement)}"
+button.pure-button.pure-button-primary id="btn_submit" type="submit" Save

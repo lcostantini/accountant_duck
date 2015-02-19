@@ -3,15 +3,16 @@ require './config/application'
 Cuba.define do
   on 'movements' do
     on ':id' do |id|
+      set_req_method if req.fullpath != "/movements/#{id}"
       movement = Movement[id]
       on get do
-        render 'form_movement', movement: movement
+        render 'edit', movement: movement
       end
       on put do
         on param 'movement' do |params|
           if can_use_actions? movement.created_at
             movement.update params
-            res.redirect 'movements'
+            res.redirect '/movements'
           else
             res.status = 401
             render "#{res.status}"
@@ -21,7 +22,7 @@ Cuba.define do
       on delete do
         if can_use_actions? movement.created_at
           movement.delete
-          res.redirect 'movements'
+          res.redirect '/movements'
         else
           res.status = 401
           render "#{res.status}"
@@ -32,7 +33,7 @@ Cuba.define do
     on root do
       on get do
         if current_user
-          render 'form_movement', movement: Movement.new
+          render 'new', movement: Movement.new
           res.write partial 'index', movements: Movement.all.to_a
         else
           render 'index', movements: Movement.all.to_a
@@ -42,7 +43,7 @@ Cuba.define do
         on param 'movement' do |params|
           params['user'] = current_user
           Movement.create params
-          res.redirect 'movements'
+          res.redirect '/movements'
         end
       end
     end
@@ -50,20 +51,21 @@ Cuba.define do
 
   on 'session' do
     on get do
-      on 'login' do
+      on 'new' do
         render 'form_login', user: User.new
       end
-      on 'logout' do
+      on root do
         session.delete 'user'
-        res.write 'movements'
+        res.redirect '/movements'
       end
     end
 
-    on post, 'login' do
+    on post, 'new' do
       on param 'user' do |params|
         user = User.with :name, params['name']
         if user && user.password == params['password']
           session[:user] = user.id
+          res.redirect '/movements'
         end
       end
     end
