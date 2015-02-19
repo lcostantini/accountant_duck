@@ -16,9 +16,17 @@ module UserHelpers
 
   def form_action movement
     if movement.attributes.empty?
-      "/"
+      'movements'
     else
-      "/edit/#{movement.id}"
+      "#{movement.id}"
+    end
+  end
+
+  def form_method movement
+    if movement.attributes.empty?
+      'POST'
+    else
+      'PUT'
     end
   end
 
@@ -31,6 +39,6 @@ module UserHelpers
   end
 
   def is_deposit? movement
-    movement.movement == "deposit"
+    movement.type == "deposit"
   end
 end

@@ -1,7 +1,7 @@
-form.pure_form action="#{form_action(movement)}" method="POST"
+form.pure_form action="#{form_action(movement)}" method="#{form_method(movement)}"
   input name="movement[description]" type="text" placeholder="Description" value="#{movement.description}" required="required"
   input name="movement[price]" type="text" placeholder="Amount" value="#{movement.price}" required="required"
-  select name="movement[movement]"
+  select name="movement[type]"
     - if is_deposit? movement
       option Extraction
       option selected="selected" Deposit
@@ -12,4 +12,4 @@ form.pure_form action="#{form_action(movement)}" method="POST"
   button.pure-button.pure-button-primary type="submit" Save
 
 - unless movement.attributes.empty?
-  a.pure-button.pure-button-primary.back-button href="/" Back
+  a.pure-button.pure-button-primary.back-button href="movements" Back

@@ -1,6 +1,6 @@
 class User < Ohm::Model
-  attribute :user_name
+  attribute :name
   attribute :password
 
-  unique :user_name
+  unique :name
 end

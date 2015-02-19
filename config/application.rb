@@ -5,11 +5,12 @@ require 'cuba/render'
 require 'rack/protection'
 require 'slim'
 require 'ohm'
+require 'json'
 
 Dir["./models/*.rb"].each { |rb| require rb }
 Dir["./helpers/*.rb"].each { |rb| require rb }
 
-Ohm.redis = Redic.new ENV['REDISCLOUD_URL']
+Ohm.redis = Redic.new(ENV['REDISCLOUD_URL'] || 'redis://127.0.0.1:6379')
 
 Cuba.use Rack::Session::Cookie, secret: '__a_very_long_string__'
 Cuba.use Rack::Protection

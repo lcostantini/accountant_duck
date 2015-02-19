@@ -11,9 +11,9 @@ html
       img src="/img/accountant_duck.png" height="30" width="30"
       div.links
         - if current_user
-            a.link href="/logout" Logout
+            a.link href="session/logout" Logout
         - else
-            a.link href="/login" Login
+            a.link href="session/login" Login
         a.link href="https://github.com/lcostantini/accountant_duck/blob/master/Readme.md" Help
     .container
       #container-head

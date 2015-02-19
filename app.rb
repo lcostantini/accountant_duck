@@ -1,56 +1,71 @@
 require './config/application'
 
 Cuba.define do
-  on root do
-    if current_user
-      render 'form_movement', movement: Movement.new
-      on param 'movement' do |params|
-        params['user'] = current_user
-        Movement.create params
-        res.redirect '/'
+  on 'movements' do
+    on ':id' do |id|
+      movement = Movement[id]
+      on get do
+        render 'form_movement', movement: movement
       end
-      res.write partial 'index', movements: Movement.all.to_a
-    else
-      render 'index', movements: Movement.all.to_a
-    end
-  end
-
-  on "edit/:id" do |id|
-    if can_use_actions? Movement[id].created_at
-      render 'form_movement', movement: Movement[id]
-      on param 'movement' do |params|
-        Movement[id].update params
-        res.redirect '/'
+      on put do
+        on param 'movement' do |params|
+          if can_use_actions? movement.created_at
+            movement.update params
+            res.redirect 'movements'
+          else
+            res.status = 401
+            render "#{res.status}"
+          end
+        end
       end
-    else
-      res.status = 401
-      render "#{res.status}"
-    end
-  end
-
-  on "delete/:id" do |id|
-    if can_use_actions? Movement[id].created_at
-      Movement[id].delete
-      res.redirect '/'
-    else
-      res.status = 401
-      render "#{res.status}"
-    end
-  end
-
-  on 'login' do
-    render 'form_login', user: User.new
-    on param 'user' do |params|
-      user = User.with :user_name, params['name']
-      if user && user.password == params['password']
-        session[:user] = user.id
-        res.redirect '/'
+      on delete do
+        if can_use_actions? movement.created_at
+          movement.delete
+          res.redirect 'movements'
+        else
+          res.status = 401
+          render "#{res.status}"
+        end
       end
     end
+
+    on root do
+      on get do
+        if current_user
+          render 'form_movement', movement: Movement.new
+          res.write partial 'index', movements: Movement.all.to_a
+        else
+          render 'index', movements: Movement.all.to_a
+        end
+      end
+      on post do
+        on param 'movement' do |params|
+          params['user'] = current_user
+          Movement.create params
+          res.redirect 'movements'
+        end
+      end
+    end
   end
 
-  on 'logout' do
-    session.delete 'user'
-    res.redirect '/'
+  on 'session' do
+    on get do
+      on 'login' do
+        render 'form_login', user: User.new
+      end
+      on 'logout' do
+        session.delete 'user'
+        res.write 'movements'
+      end
+    end
+
+    on post, 'login' do
+      on param 'user' do |params|
+        user = User.with :name, params['name']
+        if user && user.password == params['password']
+          session[:user] = user.id
+        end
+      end
+    end
   end
 end

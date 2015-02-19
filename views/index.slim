@@ -11,9 +11,9 @@
         tr
           td= movement.created_at
           td= movement.description
-          td class="#{movement.movement}"
+          td class="#{movement.type}"
             | $ #{movement.price}
             - if can_use_actions? movement.created_at
-              a.pure-button.pure-button-primary.edit-button href="/edit/#{movement.id}" Edit
-              form.button-form action="/delete/#{movement.id}" method="POST"
+              a.pure-button.pure-button-primary.edit-button href="movements/#{movement.id}" Edit
+              form.button-form action="movements/#{movement.id}" method="DELETE"
                 button.pure-button.pure-button-primary.delete-button name="delete" type="submit" Delete
