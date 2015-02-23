@@ -3,7 +3,7 @@ require './config/application'
 Cuba.define do
   on 'movements' do
     on ':id' do |id|
-      set_req_method if req.fullpath != "/movements/#{id}"
+      set_req_method
       movement = Movement[id]
       on get do
         render 'edit', movement: movement

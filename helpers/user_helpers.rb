@@ -27,10 +27,13 @@ module UserHelpers
   end
 
   def set_req_method
-    if req.fullpath.end_with? "delete="
+    case
+    when req.fullpath.end_with?("delete=")
       env["REQUEST_METHOD"] = "DELETE"
-    else
+    when !(req.fullpath.delete req.path).empty?
       env["REQUEST_METHOD"] = "PUT"
+    else
+      env["REQUEST_METHOD"]
     end
   end
 end
