@@ -55,16 +55,16 @@ Cuba.define do
         render 'form_login', user: User.new
       end
       on root do
-        session.delete 'user'
+        session.delete :user_id
         res.redirect '/movements'
       end
     end
 
     on post, 'new' do
       on param 'user' do |params|
-        user = User.with :name, params['name']
-        if user && user.password == params['password']
-          session[:user] = user.id
+        user = User.login params
+        if user
+          session[:user_id] = user.id
           res.redirect '/movements'
         end
       end

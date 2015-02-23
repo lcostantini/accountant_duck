@@ -3,4 +3,9 @@ class User < Ohm::Model
   attribute :password
 
   unique :name
+
+  def self.login credentials
+    user = User.with :name, credentials['name']
+    return user if user.password == credentials['password']
+  end
 end

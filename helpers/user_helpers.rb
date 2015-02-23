@@ -1,6 +1,6 @@
 module UserHelpers
   def current_user
-    session[:user]
+    @current_user ||= User[session[:user_id]]
   end
 
   def calculate_total
