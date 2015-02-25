@@ -1,30 +1,23 @@
 class Movement < Ohm::Model
-  attribute :user
   attribute :created_at
   attribute :description
   attribute :price
   attribute :type
 
-  index :user
   index :created_at
+  index :type
+  reference :user, :User
 
   def save
-    price_for_deposit_or_extraction
-    self.type = self.type.downcase
-    self.created_at = Time.now.strftime("%D") if self.created_at.empty?
+    self.created_at = Time.now if self.created_at.nil?
+    return false unless valid?
     super
   end
 
-  def price_for_deposit_or_extraction
-    self.price = delete_minus
-    self.price = "-#{self.price}" if self.type == "Extraction"
-  end
+  private
 
-  def delete_minus
-    if self.price[0] == "-"
-      self.price[1..-1]
-    else
-      self.price
-    end
+  def valid?
+    return true if new?
+    created_at[0..9] > (Time.now - 60 * 60 * 24).to_s[0..9]
   end
 end

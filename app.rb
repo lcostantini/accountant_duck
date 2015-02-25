@@ -29,7 +29,6 @@ Cuba.define do
         end
       end
     end
-
     on root do
       on get do
         if current_user
@@ -41,8 +40,7 @@ Cuba.define do
       end
       on post do
         on param 'movement' do |params|
-          params['user'] = current_user
-          Movement.create params
+          current_user.build_movement(params).save
           res.redirect '/movements'
         end
       end
@@ -59,7 +57,6 @@ Cuba.define do
         res.redirect '/movements'
       end
     end
-
     on post, 'new' do
       on param 'user' do |params|
         user = User.login params
