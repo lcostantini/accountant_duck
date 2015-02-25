@@ -1,6 +1,10 @@
 require './config/application'
 
 Cuba.define do
+  on get, root do
+    res.redirect '/movements'
+  end
+
   on 'movements' do
     on ':id' do |id|
       movement = Movement[id]
