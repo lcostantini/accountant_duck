@@ -27,6 +27,18 @@ h3 {
   margin: 1.5em auto;
   color: black;
 }
+h4 {
+  margin: 1.5em auto;
+  font-size: 21px;
+  margin: 1.5em auto;
+  color: rgb(169, 68, 66);
+  text-transform: none;
+  background-color: rgb(242, 222, 222);
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 12px;
+  width: 40%;
+}
 br {
   margin: 0.5em;
 }

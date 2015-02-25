@@ -1,4 +1,6 @@
+- if session[:notice]
+  h4 #{session[:notice]}
 form.pure-form.pure-form-stacked action="/session/new" method="POST"
-  input#email name="user[name]" type="text" placeholder="User"
-  input#password name="user[password]" type="password" placeholder="Password"
+  input#email name="user[name]" type="text" placeholder="User" required="required"
+  input#password name="user[password]" type="password" placeholder="Password" required="required"
   button.pure-button.pure-button-login name="login" type="submit" Login

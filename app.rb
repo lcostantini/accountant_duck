@@ -51,6 +51,7 @@ Cuba.define do
     on get do
       on 'new' do
         render 'form_login', user: User.new
+        session.delete :notice
       end
       on root do
         session.delete :user_id
@@ -63,6 +64,9 @@ Cuba.define do
         if user
           session[:user_id] = user.id
           res.redirect '/movements'
+        else
+          session[:notice] = 'Your user or password was incorrect.'
+          res.redirect '/session/new'
         end
       end
     end
