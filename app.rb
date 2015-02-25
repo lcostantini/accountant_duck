@@ -3,46 +3,41 @@ require './config/application'
 Cuba.define do
   on 'movements' do
     on ':id' do |id|
-      set_req_method
       movement = Movement[id]
-      on get do
-        render 'edit', movement: movement
-      end
-      on put do
-        on param 'movement' do |params|
-          if can_use_actions? movement.created_at
+      if can_use_actions? movement.created_at
+        set_req_method
+        on get do
+          render 'edit', movement: movement
+        end
+        on put do
+          on param 'movement' do |params|
             movement.update params
             res.redirect '/movements'
-          else
-            res.status = 403
-            render "#{res.status}"
           end
         end
-      end
-      on delete do
-        if can_use_actions? movement.created_at
+        on delete do
           movement.delete
           res.redirect '/movements'
-        else
-          res.status = 403
-          render "#{res.status}"
         end
+      else
+        res.status = 403
+        render "#{res.status}"
       end
     end
     on root do
-      on get do
-        if current_user
+      if current_user
+        on get do
           render 'new', movement: Movement.new
           res.write partial 'index', movements: Movement.all.to_a
-        else
-          render 'index', movements: Movement.all.to_a
         end
-      end
-      on post do
-        on param 'movement' do |params|
-          current_user.build_movement(params).save
-          res.redirect '/movements'
+        on post do
+          on param 'movement' do |params|
+            current_user.build_movement(params).save
+            res.redirect '/movements'
+          end
         end
+      else
+        render 'index', movements: Movement.all.to_a
       end
     end
   end
