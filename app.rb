@@ -14,7 +14,7 @@ Cuba.define do
             movement.update params
             res.redirect '/movements'
           else
-            res.status = 401
+            res.status = 403
             render "#{res.status}"
           end
         end
@@ -24,7 +24,7 @@ Cuba.define do
           movement.delete
           res.redirect '/movements'
         else
-          res.status = 401
+          res.status = 403
           render "#{res.status}"
         end
       end
