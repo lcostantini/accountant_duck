@@ -17,7 +17,7 @@ module UserHelpers
   end
 
   def can_use_actions? created_at
-    current_user && created_at[0..9] == Time.now.strftime('%Y-%m-%d')
+    current_user && created_at == Time.now.strftime('%D')
   end
 
   def date_value movement

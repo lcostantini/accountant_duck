@@ -8,7 +8,8 @@ def deposit
 end
 
 def old_deposit
-  Movement.create price: 100, type: 'Deposit', created_at: Time.now - 60 * 60 * 24
+  yesterday = (Time.now - 60 * 60 * 24).strftime('%D')
+  Movement.create price: 100, type: 'Deposit', created_at: yesterday
 end
 
 def extraction

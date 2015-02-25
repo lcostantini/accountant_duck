@@ -9,7 +9,7 @@ class Movement < Ohm::Model
   reference :user, :User
 
   def save
-    self.created_at = Time.now if self.created_at.nil?
+    self.created_at = Time.now.strftime('%D') if self.created_at.nil?
     return false unless valid?
     super
   end
@@ -18,6 +18,6 @@ class Movement < Ohm::Model
 
   def valid?
     return true if new?
-    created_at[0..9] > (Time.now - 60 * 60 * 24).to_s[0..9]
+    created_at > (Time.now - 60 * 60 * 24).strftime('%D')
   end
 end
