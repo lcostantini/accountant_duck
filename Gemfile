@@ -7,7 +7,6 @@ gem 'tilt'
 gem 'slim'
 gem 'ohm'
 gem 'rack-protection'
-gem 'json'
 
 group :development, :test do
   gem 'pry'
