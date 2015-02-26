@@ -64,6 +64,7 @@ Cuba.define do
           session[:user_id] = user.id
           res.redirect '/movements'
         else
+          res.status = 302
           session[:notice] = 'Your user or password was incorrect.'
           res.redirect '/session/new'
         end
