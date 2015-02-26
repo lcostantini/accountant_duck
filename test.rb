@@ -1,2 +1,2 @@
 require './tests/test_helper'
-require './tests/unit/movement_test'
+Dir["./tests/unit/*.rb"].each { |rb| require rb }
