@@ -5,7 +5,7 @@ require 'cuba/render'
 require 'rack/protection'
 require 'slim'
 require 'ohm'
-require 'json'
+require 'digest/sha2'
 
 Dir["./models/*.rb"].each { |rb| require rb }
 Dir["./helpers/*.rb"].each { |rb| require rb }

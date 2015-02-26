@@ -8,7 +8,7 @@ class User < Ohm::Model
 
   def self.login credentials
     user = User.with :name, credentials['name']
-    return user if user.password == credentials['password']
+    return user if user.password == Digest::SHA256.hexdigest(credentials['password'])
   end
 
   def build_movement args
