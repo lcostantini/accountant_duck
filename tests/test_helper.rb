@@ -5,6 +5,6 @@ require './app'
 
 prepare do
   Ohm.flush
-  #TODO: move the user create to the 'movement_test'
-  User.create name: 'alagranja', password: 'alagranja'
+  pwd = Digest::SHA256.hexdigest 'alagranja'
+  User.create name: 'alagranja', password: "#{pwd}"
 end

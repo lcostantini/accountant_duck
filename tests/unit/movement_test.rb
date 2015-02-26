@@ -1,6 +1,7 @@
 def current_user
   @user ||= User.with :name, 'alagranja'
-  @user ||= User.create name: 'alagranja', password: 'alagranja'
+  pwd = Digest::SHA256.hexdigest 'alagranja'
+  @user ||= User.create name: 'alagranja', password: "#{pwd}"
 end
 
 def deposit
@@ -58,7 +59,7 @@ scope do
   test 'not permited update or delete a movement' do
     id = old_deposit.id
     delete "/movements/#{id}"
-    assert_equal 401, last_response.status
+    assert_equal 403, last_response.status
   end
 
   test 'calculace total with no movements' do
