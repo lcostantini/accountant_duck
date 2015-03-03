@@ -3,19 +3,6 @@ module UserHelpers
     @current_user ||= User[session[:user_id]]
   end
 
-  def calculate_total
-    %w(Extraction Deposit).map{ |type| all_prices_for_type type }.inject(:-)
-  end
-
-  def all_prices_for_type type
-    return 0 if movement_have_type? "#{type}"
-    (Movement.find type: "#{type}").map{ |movement| movement.price.to_f }.inject(:+)
-  end
-
-  def movement_have_type? type
-    (Movement.find type: "#{type}").to_a.empty?
-  end
-
   def can_use_actions? created_at
     current_user && created_at == Time.now.strftime('%D')
   end
