@@ -13,11 +13,9 @@ Cuba.define do
         on get do
           render 'edit', movement: movement
         end
-        on put do
-          on param 'movement' do |params|
-            movement.update params
-            res.redirect '/movements'
-          end
+        on put, param('movement') do |params|
+          movement.update params
+          res.redirect '/movements'
         end
         on delete do
           movement.delete
@@ -34,11 +32,9 @@ Cuba.define do
           render 'new', movement: Movement.new
           res.write partial 'index', movements: Movement.all.to_a
         end
-        on post do
-          on param 'movement' do |params|
-            current_user.build_movement(params).save
-            res.redirect '/movements'
-          end
+        on post, param('movement') do |params|
+          current_user.build_movement(params).save
+          res.redirect '/movements'
         end
       else
         render 'index', movements: Movement.all.to_a
@@ -57,17 +53,15 @@ Cuba.define do
         res.redirect '/movements'
       end
     end
-    on post, 'new' do
-      on param 'user' do |params|
-        user = User.login params
-        if user
-          session[:user_id] = user.id
-          res.redirect '/movements'
-        else
-          res.status = 302
-          session[:notice] = 'Your user or password was incorrect.'
-          res.redirect '/session/new'
-        end
+    on post, 'new', param('user') do |params|
+      user = User.login params
+      if user
+        session[:user_id] = user.id
+        res.redirect '/movements'
+      else
+        res.status = 302
+        session[:notice] = 'Your user or password was incorrect.'
+        res.redirect '/session/new'
       end
     end
   end
