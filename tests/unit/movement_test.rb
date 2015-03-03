@@ -63,18 +63,47 @@ scope do
   end
 
   test 'calculace total with no movements' do
-    assert_equal 0, Cuba.new.calculate_total
+    assert_equal 0, Cash.instance.total
   end
 
   test 'calculate total, deposits only' do
     deposit
-    assert_equal -3000, Cuba.new.calculate_total
+    assert_equal 3000, Cash.instance.total
   end
 
-  test 'calculate total with deposit in favour' do
+  test 'calculate total with many movements' do
     deposit
     old_deposit
     extraction
-    assert_equal 0.25, Cuba.new.calculate_total
+    assert_equal -0.25, Cash.instance.total
+  end
+
+  test 'calculate total when a deposit is update' do
+    id = deposit.id
+    extraction
+    assert_equal -100.25, Cash.instance.total
+    put "/movements/#{id}", { movement: { price: 3200 } }
+    assert_equal 99.75, Cash.instance.total
+  end
+
+  test 'calculate total when a extraction is update' do
+    deposit
+    id = extraction.id
+    assert_equal -100.25, Cash.instance.total
+    put "/movements/#{id}", { movement: { price: 4000 } }
+    assert_equal -1000, Cash.instance.total
+  end
+
+  test 'calculate total when a movement is delete' do
+    id = deposit.id
+    delete "/movements/#{id}"
+    assert_equal 0, Cash.instance.total
+  end
+
+  test 'calculate total when multiple movement is delete' do
+    deposit
+    id = extraction.id
+    delete "/movements/#{id}"
+    assert_equal 3000, Cash.instance.total
   end
 end

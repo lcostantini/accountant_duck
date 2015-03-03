@@ -7,4 +7,5 @@ prepare do
   Ohm.flush
   pwd = Digest::SHA256.hexdigest 'alagranja'
   User.create name: 'alagranja', password: "#{pwd}"
+  Cash.instance.total = 0
 end
