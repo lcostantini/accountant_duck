@@ -7,6 +7,7 @@ gem 'tilt'
 gem 'slim'
 gem 'ohm'
 gem 'rack-protection'
+gem 'rack-cors', :require => 'rack/cors'
 gem 'json'
 
 group :development, :test do
