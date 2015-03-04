@@ -5,16 +5,16 @@ def current_user
 end
 
 def deposit
-  Movement.create price: 3000, type: 'Deposit'
+  Movement.create price: 300000, type: 'Deposit'
 end
 
 def old_deposit
   yesterday = (Time.now - 60 * 60 * 24).strftime('%D')
-  Movement.create price: 100, type: 'Deposit', created_at: yesterday
+  Movement.create price: 10000, type: 'Deposit', created_at: yesterday
 end
 
 def extraction
-  Movement.create price: 3100.25, type: 'Extraction'
+  Movement.create price: 310025, type: 'Extraction'
 end
 
 def mock_session
@@ -40,14 +40,14 @@ scope do
   end
 
   test 'create a movement' do
-    post '/movements', { movement: { price: 3000, description: 'increase', type: 'Deposit' } }
+    post '/movements', { movement: { price: 300000, description: 'increase', type: 'Deposit' } }
     assert_equal 1, Movement.all.count
   end
 
   test 'update a movement' do
     id = deposit.id
-    put "/movements/#{id}", { movement: { price: 100 } }
-    assert_equal 100, Movement[id].price.to_i
+    put "/movements/#{id}", { movement: { price: 10000 } }
+    assert_equal 10000, Movement[id].price.to_i
   end
 
   test 'delete a movement' do
@@ -68,30 +68,30 @@ scope do
 
   test 'calculate total, deposits only' do
     deposit
-    assert_equal 3000, Cash.instance.total
+    assert_equal 300000, Cash.instance.total
   end
 
   test 'calculate total with many movements' do
     deposit
     old_deposit
     extraction
-    assert_equal -0.25, Cash.instance.total
+    assert_equal -25, Cash.instance.total
   end
 
   test 'calculate total when a deposit is update' do
     id = deposit.id
     extraction
-    assert_equal -100.25, Cash.instance.total
-    put "/movements/#{id}", { movement: { price: 3200 } }
-    assert_equal 99.75, Cash.instance.total
+    assert_equal -10025, Cash.instance.total
+    put "/movements/#{id}", { movement: { price: 320000 } }
+    assert_equal 9975, Cash.instance.total
   end
 
   test 'calculate total when a extraction is update' do
     deposit
     id = extraction.id
-    assert_equal -100.25, Cash.instance.total
-    put "/movements/#{id}", { movement: { price: 4000 } }
-    assert_equal -1000, Cash.instance.total
+    assert_equal -10025, Cash.instance.total
+    put "/movements/#{id}", { movement: { price: 400000 } }
+    assert_equal -100000, Cash.instance.total
   end
 
   test 'calculate total when a movement is delete' do
@@ -104,6 +104,6 @@ scope do
     deposit
     id = extraction.id
     delete "/movements/#{id}"
-    assert_equal 3000, Cash.instance.total
+    assert_equal 300000, Cash.instance.total
   end
 end
