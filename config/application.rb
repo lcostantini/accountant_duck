@@ -6,6 +6,7 @@ require 'rack/protection'
 require 'slim'
 require 'ohm'
 require 'digest/sha2'
+require 'json'
 
 Dir["./models/*.rb"].each { |rb| require rb }
 Dir["./helpers/*.rb"].each { |rb| require rb }
