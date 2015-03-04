@@ -13,15 +13,15 @@ class Movement < Ohm::Model
     Cash.instance.set_total self.price, self.type if new?
     return false unless valid?
     unless new?
-      price = self.price.to_f - Movement[self.id].price.to_f
-      Cash.instance.set_total price, self.type
+      price = self.price.to_i - Movement[self.id].price.to_i
+      Cash.instance.set_total price.abs, self.type
     end
     super
   end
 
   def delete
     type = %w(Deposit Extraction).reject { |m| m == "#{self.type}" }.first
-    Cash.instance.set_total self.price, type
+    Cash.instance.set_total self.price.to_i, type
     super
   end
 

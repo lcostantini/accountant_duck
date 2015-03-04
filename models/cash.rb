@@ -1,15 +1,15 @@
 class Cash < Ohm::Model
-  attribute :total
+  counter :total
 
-  @@instance = Cash.new total: 0
+  @@instance = Cash.new
 
   def self.instance
     return @@instance.save
   end
 
   def set_total price, type
-    operator = { 'Deposit' => '+', 'Extraction' => '-' }
-    self.total = (self.total.method operator[type]).call price.to_f
+    operator = { 'Deposit' => :incr, 'Extraction' => :decr }
+    self.send operator[type], :total, price
   end
 
   private_class_method :new
