@@ -4,7 +4,6 @@ class User < Ohm::Model
 
   unique :name
   collection :movements, :Movement
-  set :movements, Movement
 
   def self.login credentials
     user = User.with :name, credentials['name']

@@ -5,38 +5,45 @@ Cuba.define do
     res.redirect '/movements'
   end
 
-  on 'api' do
-    on 'movements' do
-      on ':id' do |id|
-        movement = Movement[id]
-        set_req_method
-        on get do
-          res.write movement: movement.attributes.to_json
-        end
-        on put, param('movement') do |params|
-          movement.update params
-          res.write status: 303
-        end
-        on delete do
-          movement.delete
-          res.write status: 303
-        end
+  on 'api/movements' do
+    res.headers['Content-Type'] = 'application/json'
+
+    on ':id' do |id|
+      movement = Movement[id]
+
+      on get do
+        res.write movement: movement.attributes.to_json
       end
-      on root do
-        movements = Movement.all.to_a.map do |m|
-          (m.attributes.merge id: m.id).to_json
+
+      on put, param('movement') do |params|
+        movement.update params
+        res.write status: 303
+      end
+
+      on delete do
+        movement.delete
+        res.write status: 303
+      end
+    end
+
+    on root do
+      movements = Movement.all.to_a.map do |m|
+        (m.attributes.merge id: m.id)
+      end
+
+      if current_user
+
+        on get do
+          res.write movements.to_json
         end
-        if current_user
-          on get do
-            res.write movements: movements
-          end
-          on post, param('movement') do |params|
-            current_user.build_movement(params).save
-            res.write status: 201
-          end
-        else
-          res.write movements: movements
+
+        on post, param('movement') do |params|
+          current_user.build_movement(params).save
+          res.write status: 201
         end
+
+      else
+        res.write movements.to_json
       end
     end
   end
