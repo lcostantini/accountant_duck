@@ -29,3 +29,4 @@ end
 Cuba.plugin Cuba::Render
 Cuba.plugin UserHelpers
 Cuba.settings[:render][:template_engine] = 'slim'
+require './lib/accountant_app'
