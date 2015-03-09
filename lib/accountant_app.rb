@@ -1,3 +1,7 @@
+def current_user
+  @current_user ||= User[session[:user_id]] || false
+end
+
 class AccountanApp < Cuba
   define do
     on get, root do

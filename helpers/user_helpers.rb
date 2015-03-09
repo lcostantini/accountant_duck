@@ -1,8 +1,4 @@
 module UserHelpers
-  def current_user
-    @current_user ||= User[session[:user_id]]
-  end
-
   def can_use_actions? created_at
     current_user && created_at == Time.now.strftime('%D')
   end
