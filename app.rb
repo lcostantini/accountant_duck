@@ -1,11 +1,11 @@
 require './config/application'
 
-def current_user
-  @current_user ||= User[session[:user_id]] || raise(StandardError, 'The user is not logged.')
-end
-
 Cuba.define do
   begin
+    def current_user
+      @current_user ||= User[session[:user_id]] || raise(StandardError, 'The user is not logged.')
+    end
+
     on 'api/movements' do
       res.headers['Content-Type'] = 'application/json'
 
@@ -16,7 +16,7 @@ Cuba.define do
           res.write movement: movement.attributes.to_json
         end
 
-        on put, param('movement') do |params|
+        on put do
           movement.update params
           res.status = 200
         end
@@ -36,18 +36,19 @@ Cuba.define do
           res.write movements.to_json
         end
 
-        on post, param('movement') do |params|
-          movement = current_user.build_movement(params).save
+        on post do
+          movement = current_user.build_movement(params['movement']).save
           res.write movement: movement.id
         end
       end
 
     end
 
-    on 'api/login', post, param('user') do |params|
-      user = User.login params
+    on 'api/login', post do
+      params = JSON.parse req.body.gets
+      user = User.login params['user']
       if user
-        session[:user_id] = user.id
+        res.write session[:user_id] = user.id
       else
         res.status = 302
       end
@@ -57,11 +58,18 @@ Cuba.define do
       session.delete :user_id
     end
 
-    on default do
-      run AccountanApp
+    on get, 'me' do
+      res.write current_user.attributes.to_json
     end
 
   rescue StandardError => e
-    res.write errors: e.message
+    on true do
+      res.status = 401
+      res.write errors: e.message
+    end
+  end
+
+  on default do
+    run AccountantApp
   end
 end
