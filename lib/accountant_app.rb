@@ -1,9 +1,9 @@
-def current_user
-  @current_user ||= User[session[:user_id]] || false
-end
-
-class AccountanApp < Cuba
+class AccountantApp < Cuba
   define do
+    def current_user
+      @current_user ||= User[session[:user_id]]
+    end
+
     on get, root do
       res.redirect '/movements'
     end
