@@ -20,6 +20,7 @@ class Movement < Ohm::Model
   end
 
   def delete
+    return false unless valid?
     type = %w(Deposit Extraction).reject { |m| m == "#{self.type}" }.first
     Cash.instance.set_total self.price.to_i, type
     super
