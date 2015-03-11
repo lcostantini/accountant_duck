@@ -6,63 +6,66 @@ Cuba.define do
       @current_user ||= User[session[:user_id]] || raise(StandardError, 'The user is not logged.')
     end
 
+    def json_body
+      JSON.parse req.body.gets
+    end
+
+    res.headers['Content-Type'] = 'application/json'
     on 'api/movements' do
-      res.headers['Content-Type'] = 'application/json'
 
       on ':id' do |id|
-        movement = Movement[id]
+        current_user
+        movement ||= Movement[id] || raise(NilClass, "Movement doesn't exists with that id.")
 
         on get do
-          res.write movement: movement.attributes.to_json
+          res.write movement.attributes.to_json
         end
 
         on put do
-          movement.update params
-          res.status = 200
+          res.write movement.update json_body['movement']
         end
 
         on delete do
           movement.delete
-          res.status = 200
         end
       end
 
       on root do
-        movements = Movement.all.to_a.map do |m|
-          (m.attributes.merge id: m.id)
-        end
-
         on get do
+          movements = Movement.all.to_a.map do |m|
+            (m.attributes.merge id: m.id)
+          end
           res.write movements.to_json
         end
 
         on post do
-          movement = current_user.build_movement(params['movement']).save
-          res.write movement: movement.id
+          movement = current_user.build_movement(json_body['movement']).save
+          res.write movement.id
         end
       end
 
     end
 
     on 'api/login', post do
-      params = JSON.parse req.body.gets
-      user = User.login params['user']
+      user = User.login json_body['user']
       if user
-        res.write session[:user_id] = user.id
+        session[:user_id] = user.id
+        res.write "id: #{ user.id }"
       else
+        res.write errors: 'Your user or password was incorrect.'
         res.status = 302
       end
     end
 
     on 'api/logout', delete do
-      session.delete :user_id
+      res.write session.delete :user_id
     end
 
     on get, 'me' do
       res.write current_user.attributes.to_json
     end
 
-  rescue StandardError => e
+  rescue StandardError, NilClass => e
     on true do
       res.status = 401
       res.write errors: e.message
