@@ -23,15 +23,4 @@ scope do
     post 'api/login', { 'user' => { 'name' => 'alagranja', 'password' => 'bad_password' } }.to_json
     assert_equal 302, last_response.status
   end
-
-  test 'test create a movements' do
-    post 'api/movements', { 'movement' => { 'price' => '300000', 'description' => 'increase', 'type' => 'Deposit' } }.to_json
-    assert_equal 401, last_response.status
-  end
-
-  test 'delete a movement' do
-    id = deposit.id
-    delete "api/movements/#{id}"
-    assert_equal 200, last_response.status
-  end
 end
