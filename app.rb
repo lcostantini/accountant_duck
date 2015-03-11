@@ -7,11 +7,12 @@ Cuba.define do
     end
 
     def json_body
+      #TODO: ver de que pueda usar simbolo
       JSON.parse req.body.gets
     end
 
     res.headers['Content-Type'] = 'application/json'
-    on 'api/movements' do
+    on 'movements' do
 
       on ':id' do |id|
         current_user
@@ -22,11 +23,22 @@ Cuba.define do
         end
 
         on put do
-          res.write movement.update json_body['movement']
+          response = movement.update json_body['movement']
+          #TODO: fix this
+          if response
+            res.write response
+          else
+            res.status = 403
+          end
         end
 
         on delete do
-          movement.delete
+          response = movement.delete
+          if response
+            res.write response
+          else
+            res.status = 403
+          end
         end
       end
 
@@ -46,7 +58,7 @@ Cuba.define do
 
     end
 
-    on 'api/login', post do
+    on 'login', post do
       user = User.login json_body['user']
       if user
         session[:user_id] = user.id
@@ -57,7 +69,7 @@ Cuba.define do
       end
     end
 
-    on 'api/logout', delete do
+    on 'logout', delete do
       res.write session.delete :user_id
     end
 
@@ -70,9 +82,5 @@ Cuba.define do
       res.status = 401
       res.write errors: e.message
     end
-  end
-
-  on default do
-    run AccountantApp
   end
 end
