@@ -1,6 +1,5 @@
 ENV['RACK_ENV'] = 'test'
 ENV['REDISCLOUD_URL'] = 'redis://localhost:6379/2'
-require './config/application'
 require './app'
 
 prepare do

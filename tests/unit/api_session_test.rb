@@ -8,19 +8,19 @@ end
 
 scope do
   test 'login user' do
-    post 'api/login', { 'user' => { 'name' => 'alagranja', 'password' => 'alagranja' } }.to_json
+    post 'login', { 'user' => { 'name' => 'alagranja', 'password' => 'alagranja' } }.to_json
     @user ||= User.with :name, 'alagranja'
     assert_equal @user.id, last_request.session[:user_id]
     assert_equal 200, last_response.status
   end
 
   test 'logout user' do
-    delete 'api/logout'
+    delete 'logout'
     assert last_request.session[:user_id].nil?
   end
 
   test 'invalid credentials when user login' do
-    post 'api/login', { 'user' => { 'name' => 'alagranja', 'password' => 'bad_password' } }.to_json
+    post 'login', { 'user' => { 'name' => 'alagranja', 'password' => 'bad_password' } }.to_json
     assert_equal 302, last_response.status
   end
 end
