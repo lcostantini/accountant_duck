@@ -7,8 +7,7 @@ Cuba.define do
     end
 
     def json_body
-      #TODO: ver de que pueda usar simbolo
-      JSON.parse req.body.gets
+      JSON.parse req.body.gets, symbolize_names: true
     end
 
     res.headers['Content-Type'] = 'application/json'
@@ -23,7 +22,7 @@ Cuba.define do
         end
 
         on put do
-          response = movement.update json_body['movement']
+          response = movement.update json_body[:movement]
           #TODO: fix this
           if response
             res.write response
@@ -51,7 +50,7 @@ Cuba.define do
         end
 
         on post do
-          movement = current_user.build_movement(json_body['movement']).save
+          movement = current_user.build_movement(json_body[:movement]).save
           res.write movement.id
         end
       end
@@ -59,7 +58,7 @@ Cuba.define do
     end
 
     on 'login', post do
-      user = User.login json_body['user']
+      user = User.login json_body[:user]
       if user
         session[:user_id] = user.id
         res.write "id: #{ user.id }"
