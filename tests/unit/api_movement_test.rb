@@ -50,10 +50,10 @@ scope 'user logged' do
   mock_session
 
   test 'show a movement' do
-    #TODO: devolver objeto
     id = deposit.id
     get "/movements/#{ id }"
     assert_equal 200, last_response.status
+    assert_equal (JSON.parse last_response.body)['price'], deposit.attributes[:price].to_s
   end
 
   test 'create a movement' do
@@ -88,9 +88,10 @@ end
 
 scope do
   test 'show all movements' do
-    #TODO: devolver objeto
+    deposit
     get '/movements'
     assert_equal 200, last_response.status
+    assert_equal (JSON.parse last_response.body).first['price'], deposit.attributes[:price].to_s
   end
 
   test 'get a movement with a non existing id' do
