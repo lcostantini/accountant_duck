@@ -8,7 +8,7 @@ Cuba.define do
 
     def json_body
       #TODO: ver de que pueda usar simbolo
-      JSON.parse req.body.gets
+      @json_body ||= JSON.parse req.body.gets
     end
 
     res.headers['Content-Type'] = 'application/json'
