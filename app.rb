@@ -7,7 +7,6 @@ Cuba.define do
     end
 
     def json_body
-      #TODO: ver de que pueda usar simbolo
       @json_body ||= JSON.parse req.body.gets, symbolize_names: true
     end
 
