@@ -8,7 +8,16 @@ Cuba.define do
 
     def json_body
       #TODO: ver de que pueda usar simbolo
-      @json_body ||= JSON.parse req.body.gets
+      @json_body ||= JSON.parse req.body.gets, symbolize_names: true
+    end
+
+    def what_response? response
+      if response
+        res.write response
+      else
+        res.write errors: "You can't make any action in a movement with an old date."
+        res.status = 403
+      end
     end
 
     res.headers['Content-Type'] = 'application/json'
@@ -16,42 +25,30 @@ Cuba.define do
 
       on ':id' do |id|
         current_user
-        movement ||= Movement[id] || raise(NilClass, "Movement doesn't exists with that id.")
+        movement ||= Movement[id] || raise(StandardError, "Movement doesn't exists with that id.")
 
         on get do
           res.write movement.attributes.to_json
         end
 
         on put do
-          response = movement.update json_body['movement']
-          #TODO: fix this
-          if response
-            res.write response
-          else
-            res.status = 403
-          end
+          what_response?(movement.update json_body[:movement])
         end
 
         on delete do
-          response = movement.delete
-          if response
-            res.write response
-          else
-            res.status = 403
-          end
+          what_response? movement.delete
         end
       end
 
       on root do
         on get do
-          movements = Movement.all.to_a.map do |m|
-            (m.attributes.merge id: m.id)
+          movements = Movement.all.to_a.map { |m| m.attributes.merge id: m.id }
           end
           res.write movements.to_json
         end
 
         on post do
-          movement = current_user.build_movement(json_body['movement']).save
+          movement = current_user.build_movement(json_body[:movement]).save
           res.write movement.id
         end
       end
@@ -59,7 +56,7 @@ Cuba.define do
     end
 
     on 'login', post do
-      user = User.login json_body['user']
+      user = User.login json_body[:user]
       if user
         session[:user_id] = user.id
         res.write user.attributes.to_json
@@ -77,7 +74,7 @@ Cuba.define do
       res.write current_user.attributes.to_json
     end
 
-  rescue StandardError, NilClass => e
+  rescue StandardError => e
     on true do
       res.status = 401
       res.write errors: e.message
