@@ -14,8 +14,8 @@ Dir["./models/*.rb"].each { |rb| require rb }
 Ohm.redis = Redic.new(ENV['REDISCLOUD_URL'] || 'redis://127.0.0.1:6379')
 
 Cuba.use Rack::Session::Cookie, secret: '__a_very_long_string__'
-Cuba.use Rack::Protection
-Cuba.use Rack::Protection::RemoteReferrer
+# Cuba.use Rack::Protection
+# Cuba.use Rack::Protection::RemoteReferrer
 
 Cuba.use Rack::Cors do
   allow do

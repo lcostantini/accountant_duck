@@ -8,21 +8,22 @@ class Movement < Ohm::Model
   index :type
   reference :user, :User
 
+  def initialize atts = {}
+    super
+    self.created_at ||= Time.now.strftime('%D')
+    self.type ||= 'Deposit'
+  end
+
   def save
-    self.created_at = Time.now.strftime('%D') if self.created_at.nil?
-    Cash.instance.set_total self.price, self.type if new?
     return false unless valid?
-    unless new?
-      price = self.price.to_i - Movement[self.id].price.to_i
-      Cash.instance.set_total price.abs, self.type
-    end
+    update_cash
     super
   end
 
   def delete
     return false unless valid?
-    type = %w(Deposit Extraction).reject { |m| m == "#{self.type}" }.first
-    Cash.instance.set_total self.price.to_i, type
+    type = %w(Deposit Extraction).reject { |m| m == type.to_s }.first
+    Cash.instance.set_total price.to_i, type
     super
   end
 
@@ -32,4 +33,11 @@ class Movement < Ohm::Model
     return true if new?
     created_at > (Time.now - 60 * 60 * 24).strftime('%D')
   end
+
+  def update_cash
+    cash_price = price.to_i - Movement[id].price.to_i unless new?
+    cash_price ||= price.to_i
+    Cash.instance.set_total cash_price.to_i.abs, type
+  end
+
 end
