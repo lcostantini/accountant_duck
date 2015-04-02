@@ -62,7 +62,7 @@ Cuba.define do
       user = User.login json_body['user']
       if user
         session[:user_id] = user.id
-        res.write "id: #{ user.id }"
+        res.write user.attributes.to_json
       else
         res.write errors: 'Your user or password was incorrect.'
         res.status = 302
