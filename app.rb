@@ -3,7 +3,7 @@ require './config/application'
 Cuba.define do
   begin
     def current_user
-      @current_user ||= User[session[:user_id]] || raise(StandardError, 'The user is not logged.')
+      @current_user ||= User[session[:user_id].to_i] || raise(StandardError, 'The user is not logged in.')
     end
 
     def json_body
@@ -21,9 +21,9 @@ Cuba.define do
 
     res.headers['Content-Type'] = 'application/json'
     on 'movements' do
+      current_user
 
       on ':id' do |id|
-        current_user
         movement ||= Movement[id] || raise(StandardError, "Movement doesn't exists with that id.")
 
         on get do
@@ -64,7 +64,7 @@ Cuba.define do
       end
     end
 
-    on 'logout', delete do
+    on 'logout', get do
       res.write session.delete :user_id
     end
 

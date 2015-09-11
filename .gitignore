@@ -1,3 +1,4 @@
 *.gem
 /.config
+public/.module-cache/
 .env
