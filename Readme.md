@@ -4,7 +4,7 @@ Accountant Duck
 # A brief history
 
 # Description
-Accountant duck is a simple app to register and track all the monetary movements
+Accountant duck is a simple API to register and track all the monetary movements
 that you perform. The app let you register deposits or extractions of money and
 shows what remains of total cash after operations.
 
@@ -35,8 +35,15 @@ that you can't see the acction buttons for the movement_**
 
 # Install
 1. Clone this repo.
-2. Run [Redis](http://redis.io/download).
-3. And run **rackup**
+2. Install [Redis](http://redis.io/download) (sudo apt-get install redis).
+3. Run **bundle install** to install the gems.
+4. In a console type
+```
+irb -r './app'
+User.create name: "USERNAME", password: Digest::SHA256.hexdigest("USERPASSWORD")
+```
+5. Run the test **ruby test.rb**.
+6. And run **rackup** to start the server.
 
 # Contributing
 1. Fork it
