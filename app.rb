@@ -42,7 +42,6 @@ Cuba.define do
       on root do
         on get do
           movements = Movement.all.to_a.map { |m| m.attributes.merge id: m.id }
-          end
           res.write movements.to_json
         end
 
