@@ -1,4 +1,6 @@
 *.gem
 /.config
 public/.module-cache/
+public/app.js
+dump.rdb
 .env
