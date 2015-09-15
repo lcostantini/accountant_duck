@@ -1,0 +1,20 @@
+.pure-form input {
+  margin-right: 10px;
+}
+
+table {
+  margin-top: 15px;
+  width: 100%;
+}
+
+.negative {
+  color: red;
+}
+
+.right {
+  float: right;
+}
+
+.search-form {
+  margin-top: 40px;
+}
