@@ -50,37 +50,63 @@ var Login = React.createClass({
 var AccountantDuck = React.createClass({
   getInitialState: function() {
     return {
-      movements: [
-        {
-          id: 1,
-          date: 'Sep 11',
-          description: 'Manu brings money',
-          amount: 100
-        },
-        {
-          id: 2,
-          date: 'Sep 11',
-          description: 'Beer',
-          amount: -35
-        },
-        {
-          id: 3,
-          date: 'Sep 12',
-          description: 'Pizza',
-          amount: -50
-        },
-        {
-          id: 4,
-          date: 'Sep 14',
-          description: 'Ice Cream',
-          amount: -10
-        },
-      ],
-      filterText: ''
+      balance: 0,
+      movements: [],
+      filterText: '',
+      sortable: {
+        field: 'Date',
+        asc: true
+      }
     };
   },
-  handleAddMovement: function (movement) {
+  componentDidMount: function() {
+    //TEMP
+    //TODO
+    //API.get('movements');
+    var movements = [
+      {
+        id: 1,
+        date: 'Sep 11',
+        description: 'Manu brings money',
+        amount: 100
+      },
+      {
+        id: 2,
+        date: 'Sep 11',
+        description: 'Beer',
+        amount: -35
+      },
+      {
+        id: 3,
+        date: 'Sep 12',
+        description: 'Pizza',
+        amount: -50
+      },
+      {
+        id: 4,
+        date: 'Sep 14',
+        description: 'Ice Cream',
+        amount: -10
+      },
+    ];
+
+    balance = 0;
+
+    movements.forEach(function (movement) {
+      balance += movement.amount;
+      movement.balance = balance;
+    });
+
     this.setState({
+      balance: balance,
+      movements: movements
+    });
+  },
+  handleAddMovement: function (movement) {
+    var balance = this.state.balance + movement.amount;
+    movement.balance = balance;
+    this.setState({
+      balance: balance,
       movements: this.state.movements.concat(movement)
     });
   },
@@ -89,12 +115,31 @@ var AccountantDuck = React.createClass({
       filterText: filterText
     });
   },
+  handleSortTable: function (field) {
+    var asc = this.state.sortable.field === field ? !this.state.sortable.asc : true;
+
+    var movements = this.state.movements.sort(function (a, b) {
+      var f = field.toLowerCase();
+      return asc ? a[f].toLowerCase() > b[f].toLowerCase() : a[f].toLowerCase() < b[f].toLowerCase();
+    });
+
+    this.setState({
+      sortable: {
+        field: field,
+        asc: asc
+      },
+      movements: movements
+    });
+  },
   render: function () {
     return (
       <div>
         <AddMovement onNewMovement={this.handleAddMovement} />
         <MovementsFilter filterText={this.state.filterText} onUserInput={this.handleFilterMovements} />
-        <MovementsTable filterText={this.state.filterText} movements={this.state.movements} />
+        <MovementsTable sortable={this.state.sortable}
+                        filterText={this.state.filterText}
+                        movements={this.state.movements}
+                        handleSortTable={this.handleSortTable} />
       </div>
     );
   }
@@ -161,15 +206,14 @@ var MovementsFilter = React.createClass({
 })
 
 var MovementsTable = React.createClass({
+  handleSortTable: function (field) {
+    this.props.handleSortTable(field);
+  },
   render: function() {
     var balance = 0;
     var rows = [];
     for (var i = 0; i < this.props.movements.length; i++) {
-      balance += this.props.movements[i].amount;
-
       if(this.props.movements[i].description.indexOf(this.props.filterText) > -1) {
-        this.props.movements[i].balance = balance;
-
         rows.push(<MovementRow odd={i%2} movement={this.props.movements[i]} key={this.props.movements[i].id} />);
       }
     }
@@ -187,15 +231,43 @@ var MovementsTable = React.createClass({
       <table className="pure-table">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Income</th>
-            <th>Expense</th>
-            <th>Balance</th>
+            <MovementsHeadCell sortingByThis={this.props.sortable.field === 'Date'}
+                               asc={this.props.sortable.asc}
+                               text="Date"
+                               sortTable={this.handleSortTable} />
+            <MovementsHeadCell sortingByThis={this.props.sortable.field === 'Description'}
+                               asc={this.props.sortable.asc}
+                               text="Description"
+                               sortTable={this.handleSortTable} />
+            <MovementsHeadCell sortingByThis={this.props.sortable.field === 'Income'}
+                               asc={this.props.sortable.asc}
+                               text="Income"
+                               sortTable={this.handleSortTable} />
+            <MovementsHeadCell sortingByThis={this.props.sortable.field === 'Expense'}
+                               asc={this.props.sortable.asc}
+                               text="Expense"
+                               sortTable={this.handleSortTable} />
+            <MovementsHeadCell sortingByThis={this.props.sortable.field === 'Balance'}
+                               asc={this.props.sortable.asc}
+                               text="Balance"
+                               sortTable={this.handleSortTable} />
           </tr>
         </thead>
         <tbody>{rows}</tbody>
       </table>
+    );
+  }
+});
+
+var MovementsHeadCell = React.createClass({
+  handleCustomSort: function () {
+    this.props.sortTable(this.props.text);
+  },
+  render: function () {
+    return (
+      <th><a href="#" id={this.props.text} onClick={this.handleCustomSort}>
+        {this.props.text} {this.props.sortingByThis ? (this.props.asc ? '▼' : '▲') : ''}
+      </a></th>
     );
   }
 });
