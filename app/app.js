@@ -60,31 +60,31 @@ var AccountantDuck = React.createClass({
     };
   },
   componentDidMount: function() {
-    //TEMP
     //TODO
     //API.get('movements');
+    //TEMP
     var movements = [
       {
         id: 1,
-        date: 'Sep 11',
+        date: '2015-09-11',
         description: 'Manu brings money',
         amount: 100
       },
       {
         id: 2,
-        date: 'Sep 11',
+        date: '2015-09-11',
         description: 'Beer',
         amount: -35
       },
       {
         id: 3,
-        date: 'Sep 12',
+        date: '2015-09-12',
         description: 'Pizza',
         amount: -50
       },
       {
         id: 4,
-        date: 'Sep 14',
+        date: '2015-09-14',
         description: 'Ice Cream',
         amount: -10
       },
@@ -107,7 +107,11 @@ var AccountantDuck = React.createClass({
     movement.balance = balance;
     this.setState({
       balance: balance,
-      movements: this.state.movements.concat(movement)
+      movements: this.state.movements.concat(movement),
+      sortable: {
+        field: '',
+        asc: false
+      }
     });
   },
   handleFilterMovements: function (filterText) {
@@ -150,15 +154,20 @@ var AddMovement = React.createClass({
     e.preventDefault();
 
     var movement = {
-      date: 'Sep 14', //TEMP
+      date: this.refs.date.getDOMNode().value,
       description: this.refs.description.getDOMNode().value,
       amount: parseInt(this.refs.amount.getDOMNode().value)
     };
-
     //TODO
     //API.post('movements', movement);
 
     this.props.onNewMovement(movement);
+
+    //Reset Form
+    this.refs.description.getDOMNode().value = '';
+    this.refs.amount.getDOMNode().value = '';
+    this.refs.date.getDOMNode().value = '';
+    this.refs.description.getDOMNode().focus(true);
   },
   render: function () {
     return (
@@ -167,19 +176,17 @@ var AddMovement = React.createClass({
           <fieldset>
             <legend>Add a movement (use negative numbers to add expenses)</legend>
             <div className="pure-u-1-2">
-              <input type="text" className="pure-input-1" ref="description" placeholder="Description" />
+              <input type="text" className="pure-input-1" ref="description" placeholder="Description" required />
             </div>
             <div className="pure-u-1-6">
-              <input type="text" className="pure-input-1" ref="amount" placeholder="0.00" />
+              <input type="text" className="pure-input-1" ref="amount" placeholder="0.00" required />
             </div>
-            <div className="pure-u-1-6">
-              <input type="text" className="pure-input-1" ref="date" placeholder="mm/dd/yyyy" />
-            </div>
-            <div className="pure-u-1-6">
-              <button type="submit" className="pure-button pure-button-primary right">Save</button>
+            <div className="pure-u-1-3">
+              <input type="date" className="pure-input-1" ref="date" required />
             </div>
           </fieldset>
         </div>
+        <input type="submit" className="hidden" />
       </form>
     );
   }
@@ -289,7 +296,7 @@ var MovementRow = React.createClass({
     } else {
       return (
         <tr className={this.props.odd ? 'pure-table-odd' : ''}>
-          <td>{this.props.movement.date}</td>
+          <td>{moment(this.props.movement.date).format('MMM D, YYYY')}</td>
           <td>{this.props.movement.description}</td>
           <td>{this.props.movement.income}</td>
           <td>{this.props.movement.expense}</td>
