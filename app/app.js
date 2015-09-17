@@ -90,28 +90,21 @@ var AccountantDuck = React.createClass({
       },
     ];
 
-    balance = 0;
-
-    movements.forEach(function (movement) {
-      balance += movement.amount;
-      movement.balance = balance;
-    });
-
     this.setState({
-      balance: balance,
+      balance: this.calculateBalance(movements),
       movements: movements
     });
   },
   handleAddMovement: function (movement) {
-    var balance = this.state.balance + movement.amount;
-    movement.balance = balance;
+    var updated_movements = this.addNewMovement(movement);
+    debugger;
+    var updated_balance = this.calculateBalance(updated_movements);
+    debugger;
+    var sorted_movements = this.sortMovements(this.state.sortable.field, this.state.sortable.asc, updated_movements);
+
     this.setState({
-      balance: balance,
-      movements: this.state.movements.concat(movement),
-      sortable: {
-        field: '',
-        asc: false
-      }
+      balance: updated_balance,
+      movements: sorted_movements
     });
   },
   handleFilterMovements: function (filterText) {
@@ -122,10 +115,7 @@ var AccountantDuck = React.createClass({
   handleSortTable: function (field) {
     var asc = this.state.sortable.field === field ? !this.state.sortable.asc : true;
 
-    var movements = this.state.movements.sort(function (a, b) {
-      var f = field.toLowerCase();
-      return asc ? a[f].toLowerCase() > b[f].toLowerCase() : a[f].toLowerCase() < b[f].toLowerCase();
-    });
+    var movements = this.sortMovements(field, asc);
 
     this.setState({
       sortable: {
@@ -134,6 +124,51 @@ var AccountantDuck = React.createClass({
       },
       movements: movements
     });
+  },
+  calculateBalance: function (movements) {
+    balance = 0;
+
+    if(!movements) {
+      movements = this.state.movements;
+    }
+
+    movements.forEach(function (movement) {
+      balance += movement.amount;
+      movement.balance = balance;
+    });
+
+    return balance;
+  },
+  sortMovements: function (field, asc, movements) {
+    if(!movements) {
+      movements = this.state.movements;
+    }
+
+    return movements.sort(function (a, b) {
+      var f = field.toLowerCase();
+      return asc ? a[f].toLowerCase() > b[f].toLowerCase() : a[f].toLowerCase() < b[f].toLowerCase();
+    });
+  },
+  addNewMovement: function (movement) {
+    if(this.state.sortable.field === 'Date' && this.state.sortable.asc) {
+      var movements_by_date = this.state.movements;
+    } else {
+      var movements_by_date = this.sortMovements('Date', true, this.state.movements);
+    }
+
+    var movement_index = movements_by_date.length;
+    var found = false;
+    movements_by_date.forEach(function (m, i) {
+      if(!found && new Date(m.date) > new Date(movement.date)) {
+        movement_index = i
+        found = true;
+      }
+    });
+
+    movements_by_date.splice(movement_index, 0, movement);
+
+    return movements_by_date;
+
   },
   render: function () {
     return (
@@ -220,7 +255,7 @@ var MovementsTable = React.createClass({
     var balance = 0;
     var rows = [];
     for (var i = 0; i < this.props.movements.length; i++) {
-      if(this.props.movements[i].description.indexOf(this.props.filterText) > -1) {
+      if(this.props.movements[i].description.toLowerCase().indexOf(this.props.filterText.toLowerCase()) > -1) {
         rows.push(<MovementRow odd={i%2} movement={this.props.movements[i]} key={this.props.movements[i].id} />);
       }
     }
