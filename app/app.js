@@ -97,9 +97,7 @@ var AccountantDuck = React.createClass({
   },
   handleAddMovement: function (movement) {
     var updated_movements = this.addNewMovement(movement);
-    debugger;
     var updated_balance = this.calculateBalance(updated_movements);
-    debugger;
     var sorted_movements = this.sortMovements(this.state.sortable.field, this.state.sortable.asc, updated_movements);
 
     this.setState({
@@ -146,7 +144,9 @@ var AccountantDuck = React.createClass({
 
     return movements.sort(function (a, b) {
       var f = field.toLowerCase();
-      return asc ? a[f].toLowerCase() > b[f].toLowerCase() : a[f].toLowerCase() < b[f].toLowerCase();
+      a = typeof a[f] === "string" ? a[f].toLowerCase() : a[f];
+      b = typeof b[f] === "string" ? b[f].toLowerCase() : b[f];
+      return asc ? a > b : a < b;
     });
   },
   addNewMovement: function (movement) {
