@@ -3,10 +3,7 @@ source 'https://rubygems.org'
 ruby '2.1.2'
 
 gem 'cuba'
-gem 'tilt'
-gem 'slim'
 gem 'ohm'
-gem 'rack-protection'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'json'
 
