@@ -31,3 +31,30 @@ a:hover {
 a:visited {
   color: blue
 }
+
+.tableRow-appear {
+  opacity: 0.01;
+  transition: opacity .2s ease-in;
+}
+
+.tableRow-appear.tableRow-appear-active {
+  opacity: 1;
+}
+
+.tableRow-enter {
+  opacity: 0.01;
+}
+
+.tableRow-enter.tableRow-enter-active {
+  opacity: 1;
+  transition: opacity .2s ease-in;
+}
+
+.tableRow-leave {
+  opacity: 1;
+}
+
+.tableRow-leave.tableRow-leave-active {
+  opacity: 0.01;
+  transition: opacity .2s ease-in;
+}

@@ -1,3 +1,5 @@
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
 var API = {
   request: function (method, endpoint, data) {
     return $.ajax({
@@ -52,6 +54,7 @@ var AccountantDuck = React.createClass({
     return {
       balance: 0,
       movements: [],
+      loadingMovements: true,
       filterText: '',
       sortable: {
         field: 'Date',
@@ -92,7 +95,8 @@ var AccountantDuck = React.createClass({
 
     this.setState({
       balance: this.calculateBalance(movements),
-      movements: movements
+      movements: movements,
+      loadingMovements: false
     });
   },
   handleAddMovement: function (movement) {
@@ -178,7 +182,8 @@ var AccountantDuck = React.createClass({
         <MovementsTable sortable={this.state.sortable}
                         filterText={this.state.filterText}
                         movements={this.state.movements}
-                        handleSortTable={this.handleSortTable} />
+                        handleSortTable={this.handleSortTable}
+                        loadingMovements={this.state.loadingMovements} />
       </div>
     );
   }
@@ -217,7 +222,7 @@ var AddMovement = React.createClass({
               <input type="text" className="pure-input-1" ref="amount" placeholder="0.00" required />
             </div>
             <div className="pure-u-1-3">
-              <input type="date" className="pure-input-1" ref="date" required />
+              <input type="date" className="pure-input-1" ref="date" value={moment(new Date()).format('YYYY-MM-DD')} required />
             </div>
           </fieldset>
         </div>
@@ -263,9 +268,12 @@ var MovementsTable = React.createClass({
     if(!rows.length) {
       if(this.props.filterText.length) {
         var fake_movement = {description: 'No movements found with that description', description_only: true};
+      } else if(this.props.loadingMovements) {
+        var fake_movement = {description: 'Loading movements...', description_only: true};
       } else {
         var fake_movement = {description: 'There is no movements yet', description_only: true};
       }
+
       rows.push(<MovementRow movement={fake_movement} />);
     }
 
@@ -295,7 +303,9 @@ var MovementsTable = React.createClass({
                                sortTable={this.handleSortTable} />
           </tr>
         </thead>
-        <tbody>{rows}</tbody>
+        <ReactCSSTransitionGroup component="tbody" transitionName="tableRow" transitionAppear={true}>
+          {rows}
+        </ReactCSSTransitionGroup>
       </table>
     );
   }
