@@ -127,6 +127,22 @@ var AccountantDuck = React.createClass({
       movements: movements
     });
   },
+  handleRemoveMovement: function (id) {
+    var movements = this.state.movements;
+
+    var index = null;
+    movements.forEach(function (m, i) {
+      if(m.id === id) {
+        index = i;
+      }
+    });
+
+    movements.splice(index, 1);
+
+    this.setState({
+      movements: movements
+    });
+  },
   calculateBalance: function (movements) {
     balance = 0;
 
@@ -183,6 +199,7 @@ var AccountantDuck = React.createClass({
                         filterText={this.state.filterText}
                         movements={this.state.movements}
                         handleSortTable={this.handleSortTable}
+                        handleRemoveMovement={this.handleRemoveMovement}
                         loadingMovements={this.state.loadingMovements} />
       </div>
     );
@@ -256,12 +273,17 @@ var MovementsTable = React.createClass({
   handleSortTable: function (field) {
     this.props.handleSortTable(field);
   },
+  handleRemoveMovement: function (id) {
+    this.props.handleRemoveMovement(id);
+  },
   render: function() {
     var balance = 0;
     var rows = [];
     for (var i = 0; i < this.props.movements.length; i++) {
       if(this.props.movements[i].description.toLowerCase().indexOf(this.props.filterText.toLowerCase()) > -1) {
-        rows.push(<MovementRow odd={i%2} movement={this.props.movements[i]} key={this.props.movements[i].id} />);
+        rows.push(<MovementRow odd={i%2} movement={this.props.movements[i]}
+                               key={this.props.movements[i].id}
+                               onRemove={this.handleRemoveMovement} />);
       }
     }
 
@@ -281,6 +303,7 @@ var MovementsTable = React.createClass({
       <table className="pure-table">
         <thead>
           <tr>
+            <MovementsHeadCell />
             <MovementsHeadCell sortingByThis={this.props.sortable.field === 'Date'}
                                asc={this.props.sortable.asc}
                                text="Date"
@@ -325,6 +348,13 @@ var MovementsHeadCell = React.createClass({
 });
 
 var MovementRow = React.createClass({
+  handleDelete: function () {
+    var response = confirm('Are you sure you want to remove "' + this.props.movement.description + '" ?');
+
+    if(response) {
+      this.props.onRemove(this.props.movement.id);
+    }
+  },
   render: function() {
     if(this.props.movement.amount > 0) {
       this.props.movement.income = this.props.movement.amount;
@@ -335,12 +365,19 @@ var MovementRow = React.createClass({
     if(this.props.movement.description_only) {
       return (
         <tr className={this.props.odd ? 'pure-table-odd' : ''}>
-          <td colSpan="5">{this.props.movement.description}</td>
+          <td colSpan="6">{this.props.movement.description}</td>
         </tr>
       );
     } else {
       return (
         <tr className={this.props.odd ? 'pure-table-odd' : ''}>
+          <td>
+            <button title="Delete this movement"
+                    className="pure-button button-error"
+                    onClick={this.handleDelete}>
+              X
+            </button>
+          </td>
           <td>{moment(this.props.movement.date).format('MMM D, YYYY')}</td>
           <td>{this.props.movement.description}</td>
           <td>{this.props.movement.income}</td>

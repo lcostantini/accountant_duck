@@ -58,3 +58,8 @@ a:visited {
   opacity: 0.01;
   transition: opacity .2s ease-in;
 }
+
+.button-error {
+  background: rgb(202, 60, 60);
+  color: white;
+}
