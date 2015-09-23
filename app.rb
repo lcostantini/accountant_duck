@@ -35,14 +35,16 @@ Cuba.define do
         end
 
         on delete do
-          what_response? movement.delete
+          movement.delete
+          movements = Movement.all.sort_by(:created_at, order: 'ALPHA ASC').to_a.map { |m| m.attributes.merge id: m.id }
+          res.write movements.to_json
         end
       end
 
       on root do
         on get do
-          movements = Movement.all.to_a.map { |m| m.attributes.merge id: m.id }
-          res.write movements.to_json
+          movements = Movement.all.sort_by(:created_at, order: 'ALPHA ASC').to_a.map { |m| m.attributes.merge id: m.id }.to_json
+          res.write movements
         end
 
         on post do
