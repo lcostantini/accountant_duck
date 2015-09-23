@@ -6,9 +6,7 @@ var API = {
       method: method,
       url: 'http://localhost:9292/' + endpoint,
       data: data ? JSON.stringify(data) : null,
-      contentType: "application/json",
-      cache: false,
-      success: init
+      contentType: "application/json"
     });
   },
   get: function(endpoint) {
@@ -16,6 +14,9 @@ var API = {
   },
   post: function(endpoint, data) {
     return API.request('POST', endpoint, data);
+  },
+  delete: function(endpoint, id) {
+    return API.request('DELETE', endpoint + '/' + id, null);
   }
 }
 
@@ -63,41 +64,22 @@ var AccountantDuck = React.createClass({
     };
   },
   componentDidMount: function() {
-    //TODO
-    //API.get('movements');
-    //TEMP
-    var movements = [
-      {
-        id: 1,
-        date: '2015-09-11',
-        description: 'Manu brings money',
-        amount: 100
-      },
-      {
-        id: 2,
-        date: '2015-09-11',
-        description: 'Beer',
-        amount: -35
-      },
-      {
-        id: 3,
-        date: '2015-09-12',
-        description: 'Pizza',
-        amount: -50
-      },
-      {
-        id: 4,
-        date: '2015-09-14',
-        description: 'Ice Cream',
-        amount: -10
-      },
-    ];
-
-    this.setState({
-      balance: this.calculateBalance(movements),
-      movements: movements,
-      loadingMovements: false
-    });
+    API.get('movements')
+      .success(function (movements) {
+        this.setState({
+          balance: this.calculateBalance(movements),
+          movements: movements,
+          loadingMovements: false
+        });
+      }.bind(this))
+      .error(function (xhr, status, err) {
+        if(xhr.status === 401) {
+          React.render(
+            <Login />,
+            document.getElementById('content')
+          );
+        }
+      });
   },
   handleAddMovement: function (movement) {
     var updated_movements = this.addNewMovement(movement);
@@ -128,20 +110,13 @@ var AccountantDuck = React.createClass({
     });
   },
   handleRemoveMovement: function (id) {
-    var movements = this.state.movements;
-
-    var index = null;
-    movements.forEach(function (m, i) {
-      if(m.id === id) {
-        index = i;
-      }
-    });
-
-    movements.splice(index, 1);
-
-    this.setState({
-      movements: movements
-    });
+    API.delete('movements',id)
+      .success(function(movements) {
+        this.setState({
+          balance: this.calculateBalance(movements),
+          movements: movements
+        });
+      }.bind(this));
   },
   calculateBalance: function (movements) {
     balance = 0;
@@ -151,35 +126,42 @@ var AccountantDuck = React.createClass({
     }
 
     movements.forEach(function (movement) {
-      balance += movement.amount;
+      var amount = parseFloat(movement.price);
+      if(movement.type === 'Extraction') {
+        amount *= -1;
+      }
+
+      balance += amount;
       movement.balance = balance;
     });
 
     return balance;
   },
   sortMovements: function (field, asc, movements) {
+
+    var field = field === 'Date' ? 'created_at' : field.toLowerCase();
+
     if(!movements) {
       movements = this.state.movements;
     }
 
     return movements.sort(function (a, b) {
-      var f = field.toLowerCase();
-      a = typeof a[f] === "string" ? a[f].toLowerCase() : a[f];
-      b = typeof b[f] === "string" ? b[f].toLowerCase() : b[f];
+      a = a[field].toLowerCase();
+      b = b[field].toLowerCase();
       return asc ? a > b : a < b;
     });
   },
   addNewMovement: function (movement) {
-    if(this.state.sortable.field === 'Date' && this.state.sortable.asc) {
+    if(this.state.sortable.field === 'created_at' && this.state.sortable.asc) {
       var movements_by_date = this.state.movements;
     } else {
-      var movements_by_date = this.sortMovements('Date', true, this.state.movements);
+      var movements_by_date = this.sortMovements('created_at', true, this.state.movements);
     }
 
     var movement_index = movements_by_date.length;
     var found = false;
     movements_by_date.forEach(function (m, i) {
-      if(!found && new Date(m.date) > new Date(movement.date)) {
+      if(!found && new Date(m.created_at) > new Date(movement.created_at)) {
         movement_index = i
         found = true;
       }
@@ -209,22 +191,26 @@ var AccountantDuck = React.createClass({
 var AddMovement = React.createClass({
   handleSubmit: function (e) {
     e.preventDefault();
+    var price = parseFloat(this.refs.price.getDOMNode().value);
 
     var movement = {
-      date: this.refs.date.getDOMNode().value,
+      created_at: this.refs.date.getDOMNode().value,
       description: this.refs.description.getDOMNode().value,
-      amount: parseInt(this.refs.amount.getDOMNode().value)
+      price: Math.abs(price),
+      type: price < 0 ? 'Extraction' : 'Deposit'
     };
-    //TODO
-    //API.post('movements', movement);
 
-    this.props.onNewMovement(movement);
+    API.post('movements', {movement: movement})
+      .success(function(id) {
+        movement.id = id;
+        this.props.onNewMovement(movement);
 
-    //Reset Form
-    this.refs.description.getDOMNode().value = '';
-    this.refs.amount.getDOMNode().value = '';
-    this.refs.date.getDOMNode().value = '';
-    this.refs.description.getDOMNode().focus(true);
+        //Reset Form
+        this.refs.description.getDOMNode().value = '';
+        this.refs.price.getDOMNode().value = '';
+        this.refs.date.getDOMNode().value = '';
+        this.refs.description.getDOMNode().focus(true);
+      }.bind(this));
   },
   render: function () {
     return (
@@ -236,10 +222,10 @@ var AddMovement = React.createClass({
               <input type="text" className="pure-input-1" ref="description" placeholder="Description" required />
             </div>
             <div className="pure-u-1-6">
-              <input type="text" className="pure-input-1" ref="amount" placeholder="0.00" required />
+              <input type="text" className="pure-input-1" ref="price" placeholder="0.00" required />
             </div>
             <div className="pure-u-1-3">
-              <input type="date" className="pure-input-1" ref="date" value={moment(new Date()).format('YYYY-MM-DD')} required />
+              <input type="date" className="pure-input-1" ref="date" value="2015-09-23" required />
             </div>
           </fieldset>
         </div>
@@ -312,18 +298,9 @@ var MovementsTable = React.createClass({
                                asc={this.props.sortable.asc}
                                text="Description"
                                sortTable={this.handleSortTable} />
-            <MovementsHeadCell sortingByThis={this.props.sortable.field === 'Income'}
-                               asc={this.props.sortable.asc}
-                               text="Income"
-                               sortTable={this.handleSortTable} />
-            <MovementsHeadCell sortingByThis={this.props.sortable.field === 'Expense'}
-                               asc={this.props.sortable.asc}
-                               text="Expense"
-                               sortTable={this.handleSortTable} />
-            <MovementsHeadCell sortingByThis={this.props.sortable.field === 'Balance'}
-                               asc={this.props.sortable.asc}
-                               text="Balance"
-                               sortTable={this.handleSortTable} />
+            <MovementsHeadCell text="Income" />
+            <MovementsHeadCell text="Expense" />
+            <MovementsHeadCell text="Balance" />
           </tr>
         </thead>
         <ReactCSSTransitionGroup component="tbody" transitionName="tableRow" transitionAppear={true}>
@@ -339,11 +316,17 @@ var MovementsHeadCell = React.createClass({
     this.props.sortTable(this.props.text);
   },
   render: function () {
-    return (
-      <th><a href="#" id={this.props.text} onClick={this.handleCustomSort}>
-        {this.props.text} {this.props.sortingByThis ? (this.props.asc ? '▼' : '▲') : ''}
-      </a></th>
-    );
+    if(this.props.sortTable) {
+      return (
+        <th id={this.props.text}><a href="#" onClick={this.handleCustomSort}>
+          {this.props.text} {this.props.sortingByThis ? (this.props.asc ? '▼' : '▲') : ''}
+        </a></th>
+      );
+    } else {
+      return (
+        <th id={this.props.text} >{this.props.text}</th>
+      );
+    }
   }
 });
 
@@ -356,10 +339,10 @@ var MovementRow = React.createClass({
     }
   },
   render: function() {
-    if(this.props.movement.amount > 0) {
-      this.props.movement.income = this.props.movement.amount;
+    if(this.props.movement.type === 'Deposit') {
+      this.props.movement.income = parseFloat(this.props.movement.price);
     } else {
-      this.props.movement.expense = this.props.movement.amount;
+      this.props.movement.expense = parseFloat(this.props.movement.price);
     }
 
     if(this.props.movement.description_only) {
@@ -378,7 +361,7 @@ var MovementRow = React.createClass({
               X
             </button>
           </td>
-          <td>{moment(this.props.movement.date).format('MMM D, YYYY')}</td>
+          <td>{moment(this.props.movement.created_at).format('MMM D, YYYY')}</td>
           <td>{this.props.movement.description}</td>
           <td>{this.props.movement.income}</td>
           <td>{this.props.movement.expense}</td>
@@ -391,33 +374,7 @@ var MovementRow = React.createClass({
   }
 });
 
-function init () {
-  API.get('movements')
-    .success(showMovementsTableView)
-    .error(function (xhr, status, err) {
-      /*
-      TEMP
-      if(xhr.status === 401) {
-        showLoginView();
-      } else {
-      */
-        showMovementsTableView([]);
-      //}
-    });
-}
-
-function showLoginView () {
-  React.render(
-    <Login />,
-    document.getElementById('content')
-  );
-}
-
-function showMovementsTableView (data) {
-  React.render(
-    <AccountantDuck />,
-    document.getElementById('content')
-  );
-}
-
-init();
+React.render(
+  <AccountantDuck />,
+  document.getElementById('content')
+);
