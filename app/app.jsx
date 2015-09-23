@@ -225,7 +225,7 @@ var AddMovement = React.createClass({
               <input type="text" className="pure-input-1" ref="price" placeholder="0.00" required />
             </div>
             <div className="pure-u-1-3">
-              <input type="date" className="pure-input-1" ref="date" value="2015-09-23" required />
+              <input type="date" className="pure-input-1" ref="date" required />
             </div>
           </fieldset>
         </div>
