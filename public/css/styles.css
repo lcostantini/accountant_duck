@@ -1,0 +1,65 @@
+.pure-form input {
+  margin-right: 10px;
+  height: 42px;
+}
+
+table {
+  margin-top: 15px;
+  width: 100%;
+}
+
+.negative {
+  color: red;
+}
+
+.right {
+  float: right;
+}
+
+.search-form {
+  margin-top: 40px;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:visited {
+  color: blue
+}
+
+.tableRow-appear {
+  opacity: 0.01;
+  transition: opacity .2s ease-in;
+}
+
+.tableRow-appear.tableRow-appear-active {
+  opacity: 1;
+}
+
+.tableRow-enter {
+  opacity: 0.01;
+}
+
+.tableRow-enter.tableRow-enter-active {
+  opacity: 1;
+  transition: opacity .2s ease-in;
+}
+
+.tableRow-leave {
+  opacity: 1;
+}
+
+.tableRow-leave.tableRow-leave-active {
+  opacity: 0.01;
+  transition: opacity .2s ease-in;
+}
+
+.button-error {
+  background: rgb(202, 60, 60);
+  color: white;
+}

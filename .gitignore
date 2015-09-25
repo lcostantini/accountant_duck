@@ -1,3 +1,6 @@
 *.gem
 /.config
+public/js/.module-cache/
+public/js/app.js
+dump.rdb
 .env
