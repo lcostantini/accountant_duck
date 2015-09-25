@@ -4,7 +4,7 @@ var API = {
   request: function (method, endpoint, data) {
     return $.ajax({
       method: method,
-      url: 'http://localhost:9292/' + endpoint,
+      url: '/' + endpoint,
       data: data ? JSON.stringify(data) : null,
       contentType: "application/json"
     });
