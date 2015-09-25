@@ -30,7 +30,12 @@ var Login = React.createClass({
         password: this.refs.password.getDOMNode().value
       }
     })
-      .success(init)
+      .success(function () {
+        React.render(
+          <AccountantDuck />,
+          document.getElementById('content')
+        );
+      })
       .error(function(xhr, status, err) {
         console.error(xhr.status, status, err.toString());
       });
