@@ -1,0 +1,22 @@
+{
+  "name": "accountant_duck",
+  "version": "1.0.0",
+  "description": "Accountant Duck",
+  "scripts": {
+    "postinstall": "./node_modules/.bin/jsx  app/ public/js/ -x jsx"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lcostantini/accountant_duck.git"
+  },
+  "author": "Altoros",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/lcostantini/accountant_duck/issues"
+  },
+  "homepage": "https://github.com/lcostantini/accountant_duck",
+  "dependencies": {
+    "react-tools": "^0.13.3"
+  }
+}
