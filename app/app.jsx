@@ -208,9 +208,11 @@ var AddMovement = React.createClass({
         //Reset Form
         this.refs.description.getDOMNode().value = '';
         this.refs.price.getDOMNode().value = '';
-        this.refs.date.getDOMNode().value = '';
         this.refs.description.getDOMNode().focus(true);
       }.bind(this));
+  },
+  componentDidMount: function () {
+    this.refs.date.getDOMNode().value = moment().format('YYYY-MM-DD');
   },
   render: function () {
     return (
