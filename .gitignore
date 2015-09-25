@@ -1,5 +1,6 @@
 *.gem
 /.config
+/node_modules
 public/js/.module-cache/
 public/js/app.js
 dump.rdb
