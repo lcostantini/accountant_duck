@@ -9,8 +9,4 @@ class User < Ohm::Model
     user = User.with :name, credentials[:name]
     return user if user.password == Digest::SHA256.hexdigest(credentials[:password])
   end
-
-  def build_movement args
-    Movement.new args.merge user: self
-  end
 end

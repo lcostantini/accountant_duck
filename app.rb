@@ -12,7 +12,7 @@ Cuba.define do
 
     def what_response? response
       if response
-        res.write response
+        res.status = 204
       else
         res.write errors: "You can't make any action in a movement with an old date."
         res.status = 403
@@ -20,6 +20,7 @@ Cuba.define do
     end
 
     res.headers['Content-Type'] = 'application/json'
+
     on 'movements' do
       current_user
 
@@ -36,8 +37,8 @@ Cuba.define do
 
         on delete do
           movement.delete
-          movements = Movement.all.sort_by(:created_at, order: 'ALPHA ASC').to_a.map { |m| m.attributes.merge id: m.id }
-          res.write movements.to_json
+          res.status = 204
+          res.redirect '/movements'
         end
       end
 
@@ -48,26 +49,27 @@ Cuba.define do
         end
 
         on post do
-          movement = current_user.build_movement(json_body[:movement]).save
-          res.write movement.id
+          movement = current_user.movements.add(Movement.create json_body[:movement])
+          res.status = 201
         end
       end
 
     end
 
-    on 'login', post do
+    on post, 'login' do
       user = User.login json_body[:user]
       if user
         session[:user_id] = user.id
-        res.write user.attributes.to_json
+        res.write user.to_hash.to_json
+        res.status = 200
       else
         res.write errors: 'Your user or password was incorrect.'
         res.status = 302
       end
     end
 
-    on 'logout', get do
-      res.write session.delete :user_id
+    on get, 'logout' do
+      res.status = 204
     end
 
     on get, 'me' do
