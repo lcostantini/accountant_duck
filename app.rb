@@ -28,7 +28,7 @@ Cuba.define do
         movement ||= Movement[id] || raise(StandardError, "Movement doesn't exists with that id.")
 
         on get do
-          res.write movement.attributes.to_json
+          res.write movement.to_hash.to_json
         end
 
         on put do
@@ -44,12 +44,13 @@ Cuba.define do
 
       on root do
         on get do
-          movements = Movement.all.sort_by(:created_at, order: 'ALPHA ASC').to_a.map { |m| m.attributes.merge id: m.id }.to_json
+          movements = Movement.sort_by_date.map(&:to_hash).to_json
           res.write movements
         end
 
         on post do
           movement = current_user.movements.add(Movement.create json_body[:movement])
+          res.write movement.to_hash
           res.status = 201
         end
       end

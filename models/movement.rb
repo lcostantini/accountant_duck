@@ -27,6 +27,14 @@ class Movement < Ohm::Model
     super
   end
 
+  def self.sort_by_date
+    self.all.sort_by(:created_at, order: 'ALPHA ASC').to_a
+  end
+
+  def to_hash
+    super.merge self.attributes
+  end
+
   private
 
   def valid?
