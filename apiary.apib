@@ -1,80 +1,168 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
+HOST: http://accountant-duck.apiblueprint.org/
 
-# Polls API
+# Accountant Duck API
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+A small application to track and register deposits and extractions.
 
-## Questions Collection [/questions]
+# Login [POST]
 
-### List All Questions [GET]
+Used to login in the app. It takes a JSON object called user, containing
+a name and a password.
 
-+ Response 200 (application/json)
-
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
-
-### Create a New Question [POST]
-
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
++ name (string, required) - The username.
++ password (string, required) - The password for the username.
 
 + Request (application/json)
 
-        {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
-        }
+{
+  "user": {
+            "name": "USERNAME",
+            "password": "PASSWORD"
+          }
+}
 
 + Response 201 (application/json)
 
-    + Headers
+  + Headers
+    Location: /login
 
-            Location: /questions/2
+  + Body
+    { "name": "USERNAME",
+      "password": "0be64ae89ddd24e225434de95d501711339baeee18f009ba9b4369af27d30d60"
+    }
 
-    + Body
+# Logout [GET]
 
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
-            }
+Used to logout in the app.
+
++ Response 204
+
+# Me [GET]
+
+Used to see the attributes for the logged user.
+
++ Response 200
+
+  + Headers
+    Location: /me
+
+  + Body
+    { "name": "USERNAME",
+      "password": "0be64ae89ddd24e225434de95d501711339baeee18f009ba9b4369af27d30d60"
+    }
+
+# Group Movements
+
+Resource related to movements in the API.
+
+## Movements Collection [/movements]
+
+### List all Movements [GET]
+
+This endpoint return an array with all the movements attributes sorted by date.
+
++ Response 200 (application/json)
+
+  + Headers
+    Location: /movements
+
+  + Body
+    [
+      {
+        "created_at": 2015-09-01",
+        "description": "initial balance",
+        "price": "1400",
+        "type": "Deposit",
+        "user_id": "1",
+        "id": "1"
+      },
+      {
+        "created_at": 2015-09-01",
+        "description": "money extraction",
+        "price": "400",
+        "type": "Extraction",
+        "user_id": "1",
+        "id": "2
+      }
+    ]
+
+### Create a new Movement [POST]
+
+Create a new movement using this action. It takes a JSON object movement
+containing a description, price, type and created_at.
+
++ description (string, required) - The description of the movement.
++ price (string, required) - The amount of the transaction.
++ type (string, required) - The type of the movement.
++ created_at (string, required) - The date of the transaction.
+
++ Request (application/json)
+
+{
+  "movement": {
+                "description": "initial balance",
+                "price": "1400",
+                "type": "Deposit",
+                "created_at": 2015-09-01"
+              }
+}
+
++ Response 201 (application/json)
+
+  + Headers
+    Location: /movements/1
+
+  + Body
+    {
+      "description": "initial balance",
+      "price": "1400",
+      "type": "Deposit",
+      "created_at": 2015-09-01",
+      "id": "1"
+    }
+
+## Movement [/movements/{movement_id}]
+
++ Parameters
+  + movement_id (number, required) - ID of the Movement in the form of a integer.
+
+### View a Movement Detail [GET]
+
++ Response 200 (application/json)
+
+  + Headers
+    Location: /movements/1
+
+  + Body
+    {
+      "description": "initial balance",
+      "price": "1400",
+      "type": "Deposit",
+      "created_at": 2015-09-01",
+      "id": "1",
+      "user_id":"1"
+    }
+
+### Edit a Movement [PUT]
+
+Edit a field for a movement.
+
++ description (string, optional) - The description of the movement.
++ price (string, optional) - The amount of the transaction.
++ type (string, optional) - The type of the movement.
++ created_at (string, optional) - The date of the transaction.
+
++ Request (application/json)
+
+{
+  "movement": {
+                "price": "1000"
+              }
+}
+
++ Response 204
+
+### Delete [DELETE]
+
++ Response 204
