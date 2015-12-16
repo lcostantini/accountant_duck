@@ -5,52 +5,51 @@ HOST: http://accountant-duck.apiblueprint.org/
 
 A small application to track and register deposits and extractions.
 
-# Login [POST]
+# Login [POST /login]
 
-Used to login in the app. It takes a JSON object called user, containing
-a name and a password.
+Used to login in the app.
+
+It takes a JSON object called user, containing a name and a password.
 
 + name (string, required) - The username.
 + password (string, required) - The password for the username.
 
 + Request (application/json)
 
-{
-  "user": {
-            "name": "USERNAME",
-            "password": "PASSWORD"
-          }
-}
+        {
+            "user": {
+                        "name": "USERNAME",
+                        "password": "PASSWORD"
+                    }
+        }
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
-  + Headers
-    Location: /login
+    + Body
 
-  + Body
-    { "name": "USERNAME",
-      "password": "0be64ae89ddd24e225434de95d501711339baeee18f009ba9b4369af27d30d60"
-    }
+            {
+                "name": "USERNAME",
+                "password": "0be64ae89ddd24e225434de95d501711339baeee18f009ba9b4369af27d30d60"
+            }
 
-# Logout [GET]
+# Logout [GET /logout]
 
 Used to logout in the app.
 
 + Response 204
 
-# Me [GET]
+# Me [GET /me]
 
 Used to see the attributes for the logged user.
 
 + Response 200
 
-  + Headers
-    Location: /me
+    + Body
 
-  + Body
-    { "name": "USERNAME",
-      "password": "0be64ae89ddd24e225434de95d501711339baeee18f009ba9b4369af27d30d60"
-    }
+            {
+                "name": "USERNAME",
+                "password": "0be64ae89ddd24e225434de95d501711339baeee18f009ba9b4369af27d30d60"
+            }
 
 # Group Movements
 
@@ -64,28 +63,26 @@ This endpoint return an array with all the movements attributes sorted by date.
 
 + Response 200 (application/json)
 
-  + Headers
-    Location: /movements
+    + Body
 
-  + Body
-    [
-      {
-        "created_at": 2015-09-01",
-        "description": "initial balance",
-        "price": "1400",
-        "type": "Deposit",
-        "user_id": "1",
-        "id": "1"
-      },
-      {
-        "created_at": 2015-09-01",
-        "description": "money extraction",
-        "price": "400",
-        "type": "Extraction",
-        "user_id": "1",
-        "id": "2
-      }
-    ]
+            [
+                {
+                    "created_at": 2015-09-01",
+                    "description": "initial balance",
+                    "price": "1400",
+                    "type": "Deposit",
+                    "user_id": "1",
+                    "id": "1"
+                },
+                {
+                    "created_at": 2015-09-01",
+                    "description": "money extraction",
+                    "price": "400",
+                    "type": "Extraction",
+                    "user_id": "1",
+                    "id": "2
+                }
+            ]
 
 ### Create a new Movement [POST]
 
@@ -99,28 +96,26 @@ containing a description, price, type and created_at.
 
 + Request (application/json)
 
-{
-  "movement": {
-                "description": "initial balance",
-                "price": "1400",
-                "type": "Deposit",
-                "created_at": 2015-09-01"
-              }
-}
+        {
+            "movement": {
+                            "description": "initial balance",
+                            "price": "1400",
+                            "type": "Deposit",
+                            "created_at": 2015-09-01"
+                        }
+        }
 
 + Response 201 (application/json)
 
-  + Headers
-    Location: /movements/1
+    + Body
 
-  + Body
-    {
-      "description": "initial balance",
-      "price": "1400",
-      "type": "Deposit",
-      "created_at": 2015-09-01",
-      "id": "1"
-    }
+            {
+                "description": "initial balance",
+                "price": "1400",
+                "type": "Deposit",
+                "created_at": 2015-09-01",
+                "id": "1"
+            }
 
 ## Movement [/movements/{movement_id}]
 
@@ -131,18 +126,16 @@ containing a description, price, type and created_at.
 
 + Response 200 (application/json)
 
-  + Headers
-    Location: /movements/1
+    + Body
 
-  + Body
-    {
-      "description": "initial balance",
-      "price": "1400",
-      "type": "Deposit",
-      "created_at": 2015-09-01",
-      "id": "1",
-      "user_id":"1"
-    }
+            {
+                "description": "initial balance",
+                "price": "1400",
+                "type": "Deposit",
+                "created_at": 2015-09-01",
+                "id": "1",
+                "user_id":"1"
+            }
 
 ### Edit a Movement [PUT]
 
@@ -155,11 +148,11 @@ Edit a field for a movement.
 
 + Request (application/json)
 
-{
-  "movement": {
-                "price": "1000"
-              }
-}
+        {
+            "movement": {
+                            "price": "1000"
+                        }
+        }
 
 + Response 204
 
