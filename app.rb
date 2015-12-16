@@ -10,15 +10,6 @@ Cuba.define do
       @json_body ||= JSON.parse req.body.gets, symbolize_names: true
     end
 
-    def what_response? response
-      if response
-        res.status = 204
-      else
-        res.write errors: "You can't make any action in a movement with an old date."
-        res.status = 403
-      end
-    end
-
     res.headers['Content-Type'] = 'application/json'
 
     on 'movements' do
@@ -32,7 +23,12 @@ Cuba.define do
         end
 
         on put do
-          what_response?(movement.update json_body[:movement])
+          if movement.update(json_body[:movement])
+            res.status = 204
+          else
+            res.write errors: "You can't make any action in a movement with an old date."
+            res.status = 403
+          end
         end
 
         on delete do
@@ -74,7 +70,7 @@ Cuba.define do
     end
 
     on get, 'me' do
-      res.write current_user.attributes.to_json
+      res.write current_user.to_hash.to_json
     end
 
   rescue StandardError => e
