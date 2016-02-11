@@ -1,5 +1,5 @@
 ENV['RACK_ENV'] = 'test'
-ENV['REDISCLOUD_URL'] = 'redis://localhost:6379/2'
+ENV['HEROKU_REDIS_CRIMSON_URL'] = 'redis://localhost:6379/2'
 require './app'
 
 prepare do
