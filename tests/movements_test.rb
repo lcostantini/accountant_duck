@@ -97,7 +97,7 @@ scope 'user logged' do
 
   test 'fail to delete a movement with an old date' do
     delete "/movements/#{ old_deposit.id }"
-    assert_equal 403, last_response.status
+    assert_equal 302, last_response.status
   end
 
   test 'fail to update a movement with an old date' do
