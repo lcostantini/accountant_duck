@@ -16,14 +16,11 @@ class Movement < Ohm::Model
 
   def save
     return false unless valid?
-    update_cash
     super
   end
 
   def delete
     return false unless valid?
-    type = %w(Deposit Extraction).reject { |m| m == type.to_s }.first
-    Cash.instance.set_total price.to_i, type
     super
   end
 
@@ -41,11 +38,4 @@ class Movement < Ohm::Model
     return true if new?
     created_at > (Time.now - 60 * 60 * 24).strftime('%D')
   end
-
-  def update_cash
-    cash_price = price.to_i - Movement[id].price.to_i unless new?
-    cash_price ||= price.to_i
-    Cash.instance.set_total cash_price.to_i.abs, type
-  end
-
 end

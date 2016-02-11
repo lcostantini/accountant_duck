@@ -1,4 +1,3 @@
-require "./config/#{ ENV['RACK_ENV'] || 'development' }"
 require 'cuba'
 require 'ohm'
 require 'digest/sha2'
