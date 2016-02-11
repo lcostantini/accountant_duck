@@ -1,39 +1,28 @@
 Accountant Duck
 ================
-
-# A brief history
+![alt text](https://github.com/lcostantini/accountant_duck/blob/master/public/icons/favicon-180.png)
 
 # Description
-Accountant duck is a simple API to register and track all the monetary movements
-that you perform. The app let you register deposits or extractions of money and
-shows what remains of total cash after operations.
+Accountant Duck is a simple application to register and track all the monetary
+movements that you perform. The app let you register deposits or expenses of
+money and shows the final balance.
 
-When you go to [Accountant Duck](https://accountant-duck.herokuapp.com/) you see
-a table that have three column, the first shows the registration date of the
-transaction, the second shows a description and the third shows the price for
-the operation.
+When you go to [Accountant Duck](https://accountant-duck.herokuapp.com/) you need
+to login - don't have a signup option - and you will see a table that have five
+columns, the first shows the registration date of the transaction, the second
+shows a description, in the third and fourth column you will see the value for
+deposit and expense of money. Finally the fifth column shows the final balance.
 
-If the table has any movement recorded, you see numbers with colors, the **red**
-are **extractions** and the **blue** are **deposits**. You also see the total
-of the movements price. The total is calculated adding all deposits and
-subtracting all extractions.
+To add a new movement of money you need to add a description, a value for the
+operation **(if is an expense you need to use a negative number)** and a date.
+By default, the date shows the current date.
 
-To add a new operation in the app and edit or delete, you need to be register.
-You find the [login](https://accountant-duck.herokuapp.com/login) link up in the
-righ corner.
+**_An important detail is that transactions of today are the only ones
+that can be deleted._**
+**_You can register a movement with old date but remember that you can't see the
+acction buttons for the movement_**
 
-After you register you see again the page with the table but this time with a
-form can let you add a deposit or extraction, and a new column in the table
-called Actions.
-The column **Actions** have two buttons than let you edit and delete each
-movement. **_An important detail is that transactions of today are the only ones
-that you can edit and delete._**
-In the form you need to add a **description**, **price**, if is a **deposit**
-or **extraction** and the **date**. By default, the date shows today date,
-but you can modify.**_You can register a movement with old date but remember
-that you can't see the acction buttons for the movement_**
-
-# Install
+# How to use?
 1. Clone this repo.
 2. Install [Redis](http://redis.io/download) (sudo apt-get install redis).
 3. Run **bundle install** to install the gems.
