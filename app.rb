@@ -11,13 +11,17 @@ Cuba.define do
       @json_body ||= JSON.parse req.body.gets, symbolize_names: true
     end
 
+    def self.sort_by_date movements
+      movements.sort_by(:created_at, order: 'ALPHA ASC').map(&:to_hash).to_json
+    end
+
     res.headers['Content-Type'] = 'application/json'
 
     on 'movements' do
       current_user
 
       on ':id' do |id|
-        movement ||= Movement[id] ||
+        movement ||= current_user.movements[id] ||
           raise(TypeError, "Movement doesn't exists with that id.")
 
         on get do
@@ -25,30 +29,24 @@ Cuba.define do
         end
 
         on put do
-          if movement.update(json_body[:movement])
-            res.status = 204
-          else
-            res.write errors: "You can't make any action in a movement with an old date."
-            res.status = 403
-          end
+          movement.update(json_body[:movement])
+          res.status = 204
         end
 
         on delete do
-          movement.delete
-          res.status = 204
+          current_user.movements.delete movement
           res.redirect '/movements'
         end
       end
 
       on root do
         on get do
-          movements = Movement.sort_by_date.map(&:to_hash).to_json
-          res.write movements
+          res.write sort_by_date(current_user.movements)
         end
 
         on post do
-          movement = current_user.movements.add(Movement.create json_body[:movement])
-          res.write movement.to_hash
+          id = current_user.movements.add(Movement.create json_body[:movement])
+          res.write current_user.movements[id].to_hash.to_json
           res.status = 201
         end
       end

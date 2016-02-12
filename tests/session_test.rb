@@ -17,6 +17,7 @@ scope do
   end
 
   test 'logout user' do
+    get '/movements', {}, { 'rack.session' => { user_id: User.all.first.id } }
     get 'logout'
     assert last_request.session[:user_id].nil?
     assert_equal 204, last_response.status

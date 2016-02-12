@@ -5,16 +5,7 @@ def current_user
 end
 
 def deposit
-  Movement.create price: '300000', type: 'Deposit'
-end
-
-def old_deposit
-  yesterday = (Time.now - 60 * 60 * 24).strftime('%D')
-  Movement.create price: '10000', type: 'Deposit', created_at: yesterday
-end
-
-def extraction
-  Movement.create price: '310025', type: 'Extraction'
+  current_user.movements.add Movement.create price: '300000', type: 'Deposit'
 end
 
 def mock_session
@@ -42,29 +33,28 @@ scope 'user not logged' do
   end
 
   test 'fail to update a movement' do
-    put "/movements/#{ deposit.id }", update_body
+    put "/movements/#{ deposit }", update_body
     assert_equal 401, last_response.status
   end
 
   test 'fail to delete a movement' do
-    delete "/movements/#{ deposit.id }"
+    delete "/movements/#{ deposit }"
     assert_equal 401, last_response.status
   end
 
   test 'fail to get a movement' do
-    get "/movements/#{ deposit.id }"
+    get "/movements/#{ deposit }"
     assert_equal 401, last_response.status
   end
 end
 
 scope 'user logged' do
   mock_session
-  deposit
 
   test 'show a movement' do
-    get "/movements/#{ deposit.id }"
+    get "/movements/#{ deposit }"
     assert_equal 200, last_response.status
-    assert_equal body_json[:price], deposit.attributes[:price]
+    assert_equal body_json[:id].to_i, current_user.movements[deposit].id
   end
 
   test 'get an error when try to access a movement with a non existing id' do
@@ -73,35 +63,28 @@ scope 'user logged' do
   end
 
   test 'show all movements' do
-    id = deposit.id
+    deposit
     get '/movements'
     assert_equal 200, last_response.status
-    assert_equal body_json.first[:price], Movement[id].price
+    assert_equal body_json.first[:id].to_i, current_user.movements[deposit].id
   end
 
   test 'create a movement' do
     post '/movements', movement_body
-    assert_equal 1, Movement.all.count
+    assert_equal 1, current_user.movements.count
+    assert_equal 201, last_response.status
+    assert_equal body_json[:id].to_s, current_user.movements.to_a.last.id
   end
 
   test 'update a movement' do
-    id = deposit.id
-    put "/movements/#{ id }", update_body
-    assert_equal '100000', Movement[id].price
+    put "/movements/#{ deposit }", update_body
+    assert_equal '100000', current_user.movements[deposit].price
+    assert_equal 204, last_response.status
   end
 
   test 'delete a movement' do
-    delete "/movements/#{ deposit.id }"
-    assert_equal 0, Movement.all.count
-  end
-
-  test 'fail to delete a movement with an old date' do
-    delete "/movements/#{ old_deposit.id }"
+    delete "/movements/#{ deposit }"
+    assert_equal 0, current_user.movements.count
     assert_equal 302, last_response.status
-  end
-
-  test 'fail to update a movement with an old date' do
-    put "/movements/#{ old_deposit.id }", update_body
-    assert_equal 403, last_response.status
   end
 end
