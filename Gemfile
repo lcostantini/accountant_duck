@@ -13,4 +13,5 @@ end
 group :test do
   gem 'cutest', '~> 1.2'
   gem 'rack-test', require: 'rack/test'
+  gem 'codeclimate-test-reporter', require: nil
 end

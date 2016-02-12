@@ -1,3 +1,5 @@
+require 'codeclimate-test-reporter'
+CodeClimate::TestReporter.start
 ENV['HEROKU_REDIS_CRIMSON_URL'] = 'redis://localhost:6379/2'
 require './app'
 require 'cuba/test'
