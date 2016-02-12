@@ -1,0 +1,7 @@
+language: ruby
+rvm: 2.1.2
+script: bundle exec cutest test.rb
+services: redis-server
+addons:
+  code_climate:
+    repo_token: 0500b72c917f21b9d69df4ecc92c9c3eb549406aa5ccb7dc1e8759ae5e391cdc

@@ -1,6 +1,7 @@
 ENV['HEROKU_REDIS_CRIMSON_URL'] = 'redis://localhost:6379/2'
 require './app'
 require 'cuba/test'
+require 'cutest'
 require 'pry'
 
 prepare do
