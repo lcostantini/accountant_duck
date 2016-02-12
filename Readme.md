@@ -17,11 +17,7 @@ To add a new movement of money you need to add a description, a value for the
 operation **(if is an expense you need to use a negative number)** and a date.
 By default, the date shows the current date.
 
-**_An important detail is that transactions of today are the only ones
-that can be deleted._**
-**_You can register a movement with old date but remember that you can't see the
-acction buttons for the movement_**
-
+The app has an API in Cuba and a the front-end in ReactJS.
 # How to use?
 1. Clone this repo.
 2. Install [Redis](http://redis.io/download) (sudo apt-get install redis).
