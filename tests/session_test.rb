@@ -17,8 +17,9 @@ scope do
   end
 
   test 'logout user' do
-    delete 'logout'
+    get 'logout'
     assert last_request.session[:user_id].nil?
+    assert_equal 204, last_response.status
   end
 
   test 'invalid credentials when user login' do

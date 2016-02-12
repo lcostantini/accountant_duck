@@ -68,8 +68,8 @@ scope 'user logged' do
   end
 
   test 'get an error when try to access a movement with a non existing id' do
-    get '/movements/7'
-    assert_equal 401, last_response.status
+    get '/movements/404'
+    assert_equal 404, last_response.status
   end
 
   test 'show all movements' do
