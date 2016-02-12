@@ -1,55 +1,42 @@
 FORMAT: 1A
-HOST: http://accountant-duck.apiblueprint.org/
+HOST: http://accountant-duck.herokuapp.com/
 
-# Accountant Duck API
-
-A small application to track and register deposits and extractions.
+# Accountant Duck
+Small application to track and register deposits and expenses of money and see the final balance.
 
 # Login [POST /login]
-
 Used to login in the app.
 
-It takes a JSON object called user, containing a name and a password.
+Receives a JSON object called user with name and password.
 
-+ name (string, required) - The username.
-+ password (string, required) - The password for the username.
++ Parameters
+    + name (string, required) - The user name.
+    + password (string, required) - The password for the user.
 
 + Request (application/json)
 
-        {
-            "user": {
-                        "name": "USERNAME",
-                        "password": "PASSWORD"
-                    }
-        }
+    + Body
+
+            {
+              "user": {
+                "name": "USERNAME",
+                "password": "PASSWORD"
+              }
+            }
 
 + Response 200 (application/json)
 
     + Body
 
             {
-                "name": "USERNAME",
-                "password": "0be64ae89ddd24e225434de95d501711339baeee18f009ba9b4369af27d30d60"
+              "name": "USERNAME",
+              "password": "0be64ae89ddd24e225434de95d501711339baeee18f009ba9b4369af27d30d60"
             }
 
 # Logout [GET /logout]
-
 Used to logout in the app.
 
 + Response 204
-
-# Me [GET /me]
-
-Used to see the attributes for the logged user.
-
-+ Response 200
-
-    + Body
-
-            {
-                "name": "USERNAME",
-                "password": "0be64ae89ddd24e225434de95d501711339baeee18f009ba9b4369af27d30d60"
-            }
 
 # Group Movements
 
@@ -57,105 +44,103 @@ Resource related to movements in the API.
 
 ## Movements Collection [/movements]
 
-### List all Movements [GET]
-
-This endpoint return an array with all the movements attributes sorted by date.
+### Movements Index [GET]
 
 + Response 200 (application/json)
 
     + Body
 
             [
-                {
-                    "created_at": 2015-09-01",
-                    "description": "initial balance",
-                    "price": "1400",
-                    "type": "Deposit",
-                    "user_id": "1",
-                    "id": "1"
-                },
-                {
-                    "created_at": 2015-09-01",
-                    "description": "money extraction",
-                    "price": "400",
-                    "type": "Extraction",
-                    "user_id": "1",
-                    "id": "2
-                }
+              {
+                "created_at": 2015-09-01",
+                "description": "initial balance",
+                "price": "1400",
+                "type": "Deposit",
+                "user_id": "1",
+                "id": "1"
+              },
+              {
+                "created_at": 2015-09-01",
+                "description": "money extraction",
+                "price": "400",
+                "type": "Extraction",
+                "user_id": "1",
+                "id": "2
+              }
             ]
 
-### Create a new Movement [POST]
-
-Create a new movement using this action. It takes a JSON object movement
-containing a description, price, type and created_at.
-
-+ description (string, required) - The description of the movement.
-+ price (string, required) - The amount of the transaction.
-+ type (string, required) - The type of the movement.
-+ created_at (string, required) - The date of the transaction.
+### Movement Create [POST]
++ Attributes
+    + description (string, required) - The description of the movement.
+    + price (string, required) - The amount of the transaction.
+    + type (string, required) - The type of the movement.
+    + created_at (string, required) - The date of the transaction.
 
 + Request (application/json)
 
-        {
-            "movement": {
-                            "description": "initial balance",
-                            "price": "1400",
-                            "type": "Deposit",
-                            "created_at": 2015-09-01"
-                        }
-        }
+    + Body
+
+            {
+              "movement": {
+                "description": "initial balance",
+                "price": "1400",
+                "type": "Deposit",
+                "created_at": 2015-09-01"
+              }
+            }
 
 + Response 201 (application/json)
 
     + Body
 
             {
-                "description": "initial balance",
-                "price": "1400",
-                "type": "Deposit",
-                "created_at": 2015-09-01",
-                "id": "1"
+              "description": "initial balance",
+              "price": "1400",
+              "type": "Deposit",
+              "created_at": 2015-09-01",
+              "id": "1"
             }
 
-## Movement [/movements/{movement_id}]
+## Movement [/movements/{id}]
+Actions on the id resource.
 
 + Parameters
-  + movement_id (number, required) - ID of the Movement in the form of a integer.
+    + id (number, required) - Movement id.
 
-### View a Movement Detail [GET]
+### Movement Show [GET]
 
 + Response 200 (application/json)
 
     + Body
 
             {
-                "description": "initial balance",
-                "price": "1400",
-                "type": "Deposit",
-                "created_at": 2015-09-01",
-                "id": "1",
-                "user_id":"1"
+              "description": "initial balance",
+              "price": "1400",
+              "type": "Deposit",
+              "created_at": 2015-09-01",
+              "id": "1",
+              "user_id":"1"
             }
 
-### Edit a Movement [PUT]
-
-Edit a field for a movement.
-
-+ description (string, optional) - The description of the movement.
-+ price (string, optional) - The amount of the transaction.
-+ type (string, optional) - The type of the movement.
-+ created_at (string, optional) - The date of the transaction.
+### Movement Update [PUT]
++ Attributes
+    + description (string, optional) - The description of the movement.
+    + price (string, optional) - The amount of the transaction.
+    + type (string, optional) - The type of the movement.
+    + created_at (string, optional) - The date of the transaction.
 
 + Request (application/json)
 
-        {
-            "movement": {
-                            "price": "1000"
-                        }
-        }
+    + Body
+
+            {
+              "movement": {
+                "price": "1000"
+              }
+            }
 
 + Response 204
 
-### Delete [DELETE]
+### Movement Delete [GET]
 
 + Response 204
