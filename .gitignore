@@ -3,5 +3,7 @@
 /node_modules
 public/js/.module-cache/
 public/js/app.js
+public/js/moment.min.js
+public/css/pure.min.css
 dump.rdb
 .env
